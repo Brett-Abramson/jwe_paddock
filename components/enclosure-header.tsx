@@ -44,7 +44,7 @@ function RosterChip({
         type="button"
         onClick={() => setDetailOpen(true)}
         title="Environment requirements"
-        className="hover:underline"
+        className="cursor-pointer hover:underline"
       >
         {species.name}
       </button>

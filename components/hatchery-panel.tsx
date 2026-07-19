@@ -99,7 +99,7 @@ export function HatcheryPanel({ park, onClose }: { park: Park; onClose: () => vo
                     type="button"
                     onClick={() => setDetailSpecies(s)}
                     title="Environment requirements"
-                    className="truncate text-left text-[13px] font-semibold text-ink hover:underline"
+                    className="cursor-pointer truncate text-left text-[13px] font-semibold text-ink hover:underline"
                   >
                     {s.name}
                   </button>

@@ -149,7 +149,7 @@ export function CandidateRow({
               type="button"
               onClick={() => setDetailOpen(true)}
               title="Environment requirements"
-              className={`text-[14px] font-semibold hover:underline ${
+              className={`cursor-pointer text-[14px] font-semibold hover:underline ${
                 status === "blocked" ? "text-bad-text line-through decoration-bad-dot" : "text-ink"
               }`}
             >
