@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useApp } from "@/lib/store";
 import { SPECIES } from "@/lib/data";
-import type { Park } from "@/lib/types";
+import type { Park, Species } from "@/lib/types";
 import { resolveHatchery, resolveRoster, effectiveRuleset } from "@/lib/selectors";
 import { scoreCandidates, enclosurePeriod, type GameStatus } from "@/lib/engine";
+import { SpeciesDetailModal } from "./species-detail";
 
 type HatcheryStatus = GameStatus | "in-roster" | "wrong-habitat";
 
@@ -21,8 +22,12 @@ export function HatcheryPanel({ park, onClose }: { park: Park; onClose: () => vo
   const { species, unknown } = useMemo(() => resolveHatchery(park), [park]);
   const enclosure = state.activeEnclosureId ? state.enclosures[state.activeEnclosureId] : undefined;
   const ref = useRef<HTMLDivElement>(null);
+  const [detailSpecies, setDetailSpecies] = useState<Species | null>(null);
 
   useEffect(() => {
+    // The species-detail modal owns its own close handling while open — attaching
+    // these would also treat clicks inside it as "outside" and close the hatchery.
+    if (detailSpecies) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -35,7 +40,7 @@ export function HatcheryPanel({ park, onClose }: { park: Park; onClose: () => vo
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("mousedown", onDoc);
     };
-  }, [onClose]);
+  }, [onClose, detailSpecies]);
 
   const statusById = useMemo(() => {
     const map = new Map<string, HatcheryStatus>();
@@ -90,7 +95,14 @@ export function HatcheryPanel({ park, onClose }: { park: Park; onClose: () => vo
                 className="flex items-center gap-2.5 rounded-[9px] border border-line bg-inset px-3 py-2.5"
               >
                 <div className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-[13px] font-semibold text-ink">{s.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setDetailSpecies(s)}
+                    title="Environment requirements"
+                    className="truncate text-left text-[13px] font-semibold text-ink hover:underline"
+                  >
+                    {s.name}
+                  </button>
                   <span className="pa-mono text-[11px] text-muted">
                     {s.family} · appeal {s.appeal}
                   </span>
@@ -155,6 +167,10 @@ export function HatcheryPanel({ park, onClose }: { park: Park; onClose: () => vo
           it{enclosure ? ` in ${enclosure.name}` : ""} later.
         </div>
       </div>
+
+      {detailSpecies && (
+        <SpeciesDetailModal species={detailSpecies} onClose={() => setDetailSpecies(null)} />
+      )}
     </div>
   );
 }

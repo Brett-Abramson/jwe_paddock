@@ -8,6 +8,7 @@ import { effectiveRuleset, resolveRoster } from "@/lib/selectors";
 import { scoreCandidates, enclosurePeriod, type Candidate, type RankBy } from "@/lib/engine";
 import { Segmented } from "./ui/segmented";
 import { Menu, MenuItem } from "./ui/menu";
+import { SpeciesDetailModal } from "./species-detail";
 
 function AccuracyChip({ candidate }: { candidate: Candidate }) {
   const { accuracy } = candidate;
@@ -100,6 +101,7 @@ export function CandidateRow({
   const { state, dispatch } = useApp();
   const { species, status, accuracy } = candidate;
   const anachronism = accuracy.applies && accuracy.tone === "warn";
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const parkId = state.enclosures[enclosureId]?.parkId;
   const park = parkId ? state.parks.find((p) => p.id === parkId) : undefined;
@@ -143,13 +145,16 @@ export function CandidateRow({
         />
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <span
-              className={`text-[14px] font-semibold ${
+            <button
+              type="button"
+              onClick={() => setDetailOpen(true)}
+              title="Environment requirements"
+              className={`text-[14px] font-semibold hover:underline ${
                 status === "blocked" ? "text-bad-text line-through decoration-bad-dot" : "text-ink"
               }`}
             >
               {species.name}
-            </span>
+            </button>
             <span
               className={`pa-mono text-[10px] font-semibold tracking-[0.06em] ${statusWordClass(status)}`}
             >
@@ -213,6 +218,10 @@ export function CandidateRow({
             Swap in
           </button>
         </div>
+      )}
+
+      {detailOpen && (
+        <SpeciesDetailModal species={species} onClose={() => setDetailOpen(false)} />
       )}
     </div>
   );

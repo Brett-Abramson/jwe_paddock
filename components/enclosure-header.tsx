@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useApp } from "@/lib/store";
 import type { Enclosure, RosterEntry, Species } from "@/lib/types";
 import { activePark, parkEnclosures, resolveRoster } from "@/lib/selectors";
@@ -8,6 +9,7 @@ import { Menu } from "./ui/menu";
 import { Segmented } from "./ui/segmented";
 import { Stepper } from "./ui/stepper";
 import { RulesetControl } from "./ruleset-control";
+import { SpeciesDetailModal } from "./species-detail";
 
 function dietDot(species: Species): string {
   const d = species.diet.join(" ").toLowerCase();
@@ -30,6 +32,7 @@ function RosterChip({
   // Moving a species is the only way to create a roster conflict — Candidates
   // never offer one (see the "conflict in roster" state).
   const others = parkEnclosures(state, activePark(state)).filter((e) => e.id !== enclosureId);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   return (
     <div className="flex items-center gap-2 rounded-[20px] border border-line bg-inset py-1 pr-1.5 pl-2.5 text-[12px] text-ink2">
@@ -37,7 +40,14 @@ function RosterChip({
         className="inline-block h-1.5 w-1.5 rounded-full"
         style={{ background: dietDot(species) }}
       />
-      <span>{species.name}</span>
+      <button
+        type="button"
+        onClick={() => setDetailOpen(true)}
+        title="Environment requirements"
+        className="hover:underline"
+      >
+        {species.name}
+      </button>
       <span className="pa-mono text-[11px] text-muted">×{member.count}</span>
       {showJuveniles && member.juveniles > 0 && (
         <span className="pa-mono rounded-[9px] bg-juv-header px-1.5 text-[10px] text-juv-text">
@@ -138,6 +148,9 @@ function RosterChip({
           </div>
         )}
       </Menu>
+      {detailOpen && (
+        <SpeciesDetailModal species={species} onClose={() => setDetailOpen(false)} />
+      )}
     </div>
   );
 }
