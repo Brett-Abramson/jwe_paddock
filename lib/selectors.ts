@@ -5,7 +5,7 @@
 // ============================================================================
 
 import type { AppState } from "./store";
-import type { Enclosure, Park, Ruleset, RosterEntry } from "./types";
+import type { Enclosure, Park, Ruleset, RosterEntry, Species } from "./types";
 import { getSpecies, getRuleset } from "./data";
 import type { RosterMember } from "./engine";
 
@@ -92,4 +92,23 @@ export function resolveRoster(enclosure: Enclosure | undefined): ResolvedRoster 
     });
   }
   return { members, unknown };
+}
+
+export interface ResolvedHatchery {
+  species: Species[];
+  /** speciesIds no longer in the dataset (data drift) */
+  unknown: string[];
+}
+
+/** A park's hatchery is a flat staging list, not tied to any enclosure's rules. */
+export function resolveHatchery(park: Park | undefined): ResolvedHatchery {
+  if (!park) return { species: [], unknown: [] };
+  const species: Species[] = [];
+  const unknown: string[] = [];
+  for (const id of park.hatchery) {
+    const s = getSpecies(id);
+    if (s) species.push(s);
+    else unknown.push(id);
+  }
+  return { species, unknown };
 }

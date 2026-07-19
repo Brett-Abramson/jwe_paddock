@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useApp } from "@/lib/store";
 import { MANIFEST, PLANTS } from "@/lib/data";
@@ -15,6 +16,7 @@ import { enclosureHealth } from "@/lib/engine";
 import type { Enclosure } from "@/lib/types";
 import { Menu, MenuItem } from "./ui/menu";
 import { shortRulesetLabel } from "./ruleset-control";
+import { HatcheryPanel } from "./hatchery-panel";
 
 function HealthStrip({ enclosure }: { enclosure: Enclosure }) {
   const { state } = useApp();
@@ -107,6 +109,7 @@ function EnclosureItem({ enclosure, showRuleset }: { enclosure: Enclosure; showR
 export function ParkRail() {
   const { state, dispatch } = useApp();
   const park = activePark(state);
+  const [hatcheryOpen, setHatcheryOpen] = useState(false);
   if (!park) return null;
   const enclosures = parkEnclosures(state, park);
   // Once a park is Custom, every enclosure declares which ruleset it follows.
@@ -192,9 +195,13 @@ export function ParkRail() {
 
       {/* footer */}
       <div className="flex flex-col gap-2 border-t border-line2 px-4 py-3 text-[12px] text-muted">
-        <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setHatcheryOpen(true)}
+          className="flex items-center gap-2 text-left hover:text-body"
+        >
           <span aria-hidden>🗂</span> Hatchery — {park.hatchery.length} staged
-        </div>
+        </button>
         <div className="flex items-center gap-2">
           <span aria-hidden>📚</span> Species library
         </div>
@@ -205,6 +212,8 @@ export function ParkRail() {
           data as of · {MANIFEST.asOf} · {MANIFEST.speciesCount} species
         </div>
       </div>
+
+      {hatcheryOpen && <HatcheryPanel park={park} onClose={() => setHatcheryOpen(false)} />}
     </aside>
   );
 }

@@ -97,9 +97,21 @@ export function CandidateRow({
   candidate: Candidate;
   enclosureId: string;
 }) {
-  const { dispatch } = useApp();
+  const { state, dispatch } = useApp();
   const { species, status, accuracy } = candidate;
   const anachronism = accuracy.applies && accuracy.tone === "warn";
+
+  const parkId = state.enclosures[enclosureId]?.parkId;
+  const park = parkId ? state.parks.find((p) => p.id === parkId) : undefined;
+  const staged = park?.hatchery.includes(species.id) ?? false;
+  const toggleHatchery = () => {
+    if (!parkId) return;
+    dispatch(
+      staged
+        ? { type: "REMOVE_FROM_HATCHERY", parkId, speciesId: species.id }
+        : { type: "ADD_TO_HATCHERY", parkId, speciesId: species.id },
+    );
+  };
 
   const wrapper =
     status === "blocked"
@@ -156,6 +168,19 @@ export function CandidateRow({
         <span className="pa-mono w-[72px] flex-none text-right text-[12px] whitespace-nowrap text-muted">
           appeal {candidate.appeal}
         </span>
+        <button
+          type="button"
+          onClick={toggleHatchery}
+          title={staged ? "Remove from hatchery" : "Stage in hatchery"}
+          aria-label={staged ? `Remove ${species.name} from hatchery` : `Stage ${species.name} in hatchery`}
+          className={`flex-none rounded-[7px] border px-2.5 py-1.5 text-[13px] leading-none ${
+            staged
+              ? "border-ok-line bg-ok-tint text-ok-text"
+              : "border-line text-muted hover:bg-inset hover:text-body"
+          }`}
+        >
+          🥚
+        </button>
         {status !== "blocked" && (
           <button
             type="button"

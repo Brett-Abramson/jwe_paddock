@@ -62,7 +62,9 @@ export type Action =
   | { type: "RENAME_ENCLOSURE"; enclosureId: string; name: string }
   | { type: "DELETE_ENCLOSURE"; enclosureId: string }
   | { type: "NEW_PARK" }
-  | { type: "RENAME_PARK"; parkId: string; name: string };
+  | { type: "RENAME_PARK"; parkId: string; name: string }
+  | { type: "ADD_TO_HATCHERY"; parkId: string; speciesId: string }
+  | { type: "REMOVE_FROM_HATCHERY"; parkId: string; speciesId: string };
 
 function seedState(): AppState {
   return {
@@ -290,6 +292,26 @@ function reducer(state: AppState, action: Action): AppState {
       return {
         ...state,
         parks: state.parks.map((p) => (p.id === action.parkId ? { ...p, name: action.name } : p)),
+      };
+
+    case "ADD_TO_HATCHERY":
+      return {
+        ...state,
+        parks: state.parks.map((p) =>
+          p.id === action.parkId && !p.hatchery.includes(action.speciesId)
+            ? { ...p, hatchery: [...p.hatchery, action.speciesId] }
+            : p,
+        ),
+      };
+
+    case "REMOVE_FROM_HATCHERY":
+      return {
+        ...state,
+        parks: state.parks.map((p) =>
+          p.id === action.parkId
+            ? { ...p, hatchery: p.hatchery.filter((id) => id !== action.speciesId) }
+            : p,
+        ),
       };
 
     default:
