@@ -65,29 +65,170 @@ function HealthStrip({ enclosure }: { enclosure: Enclosure }) {
   );
 }
 
+function DeleteEnclosureConfirm({
+  enclosure,
+  onCancel,
+  close,
+}: {
+  enclosure: Enclosure;
+  onCancel: () => void;
+  close: () => void;
+}) {
+  const { dispatch } = useApp();
+  return (
+    <div className="flex flex-col gap-2 p-2">
+      <div className="text-[12px] text-body">
+        Delete <span className="font-semibold text-ink">{enclosure.name}</span>? Its planned
+        roster goes with it.
+      </div>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={onCancel}
+          className="flex-1 rounded-[6px] border border-line px-2 py-1.5 text-[12px] text-body hover:bg-inset"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            dispatch({ type: "DELETE_ENCLOSURE", enclosureId: enclosure.id });
+            close();
+          }}
+          className="flex-1 rounded-[6px] border border-bad-line bg-bad-tint px-2 py-1.5 text-[12px] font-semibold text-bad-text hover:opacity-90"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function EnclosureMenuContent({
+  enclosure,
+  onRename,
+  close,
+}: {
+  enclosure: Enclosure;
+  onRename: () => void;
+  close: () => void;
+}) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  if (confirmDelete) {
+    return (
+      <DeleteEnclosureConfirm
+        enclosure={enclosure}
+        onCancel={() => setConfirmDelete(false)}
+        close={close}
+      />
+    );
+  }
+
+  return (
+    <>
+      <MenuItem onClick={onRename}>Rename</MenuItem>
+      <button
+        type="button"
+        onClick={() => setConfirmDelete(true)}
+        className="w-full rounded-[6px] px-3 py-2 text-left text-[13px] text-bad-text hover:bg-bad-tint"
+      >
+        Delete enclosure
+      </button>
+    </>
+  );
+}
+
 function EnclosureItem({ enclosure, showRuleset }: { enclosure: Enclosure; showRuleset: boolean }) {
   const { state, dispatch } = useApp();
   const selected = state.activeEnclosureId === enclosure.id;
   const headcount = enclosure.roster.reduce((n, r) => n + r.count, 0);
   const { ruleset, inherited } = enclosureRulesetInfo(state, enclosure);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(enclosure.name);
+
+  const select = () => dispatch({ type: "SELECT_ENCLOSURE", enclosureId: enclosure.id });
+
+  const commitRename = () => {
+    const trimmed = draft.trim();
+    if (trimmed && trimmed !== enclosure.name) {
+      dispatch({ type: "RENAME_ENCLOSURE", enclosureId: enclosure.id, name: trimmed });
+    } else {
+      setDraft(enclosure.name);
+    }
+    setEditing(false);
+  };
 
   return (
-    <button
-      type="button"
-      onClick={() => dispatch({ type: "SELECT_ENCLOSURE", enclosureId: enclosure.id })}
-      className={`flex flex-col gap-1.5 rounded-[9px] px-3 py-2.5 text-left ${
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => {
+        if (!editing) select();
+      }}
+      onKeyDown={(e) => {
+        if (!editing && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          select();
+        }
+      }}
+      className={`flex cursor-pointer flex-col gap-1.5 rounded-[9px] px-3 py-2.5 text-left ${
         selected
           ? "border border-cta/50 bg-inset"
           : "border border-transparent hover:bg-panel"
       }`}
     >
-      <div className="flex items-center justify-between gap-2">
-        <span
-          className={`text-[13px] ${selected ? "font-semibold text-ink" : "font-medium text-body"}`}
-        >
-          {enclosure.name}
-        </span>
-        <span className="pa-mono text-[10px] text-muted">{headcount}</span>
+      <div className="flex items-center gap-2">
+        {editing ? (
+          <input
+            autoFocus
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitRename();
+              if (e.key === "Escape") {
+                setDraft(enclosure.name);
+                setEditing(false);
+              }
+            }}
+            onBlur={commitRename}
+            className="min-w-0 flex-1 rounded-[5px] border border-line bg-inset px-1.5 py-0.5 text-[13px] font-semibold text-ink focus:outline-none"
+          />
+        ) : (
+          <span
+            className={`min-w-0 flex-1 truncate text-[13px] ${selected ? "font-semibold text-ink" : "font-medium text-body"}`}
+          >
+            {enclosure.name}
+          </span>
+        )}
+        <span className="pa-mono flex-none text-[10px] text-muted">{headcount}</span>
+        {/* Menu's own toggle button lives between this stopPropagation guard and
+            the trigger content, so the guard must wrap the whole Menu — putting
+            it on the trigger span instead would also swallow Menu's own click. */}
+        <div onClick={(e) => e.stopPropagation()} className="flex-none">
+          <Menu
+            align="right"
+            widthClass="min-w-[170px]"
+            trigger={() => (
+              <span className="flex h-5 w-5 flex-none items-center justify-center rounded-full text-muted hover:bg-app/40 hover:text-body">
+                ⋯
+              </span>
+            )}
+          >
+            {(close) => (
+              <EnclosureMenuContent
+                enclosure={enclosure}
+                onRename={() => {
+                  setDraft(enclosure.name);
+                  setEditing(true);
+                  close();
+                }}
+                close={close}
+              />
+            )}
+          </Menu>
+        </div>
       </div>
       <HealthStrip enclosure={enclosure} />
       {showRuleset && (
@@ -102,7 +243,7 @@ function EnclosureItem({ enclosure, showRuleset }: { enclosure: Enclosure; showR
           {shortRulesetLabel(ruleset)}
         </span>
       )}
-    </button>
+    </div>
   );
 }
 
