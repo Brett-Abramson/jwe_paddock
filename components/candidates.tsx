@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useApp } from "@/lib/store";
 import { SPECIES, MANIFEST } from "@/lib/data";
 import type { Enclosure } from "@/lib/types";
 import { effectiveRuleset, resolveRoster } from "@/lib/selectors";
 import { scoreCandidates, enclosurePeriod, type Candidate, type RankBy } from "@/lib/engine";
 import { Segmented } from "./ui/segmented";
+import { Menu, MenuItem } from "./ui/menu";
 
 function AccuracyChip({ candidate }: { candidate: Candidate }) {
   const { accuracy } = candidate;
@@ -29,6 +30,64 @@ function statusWordClass(status: Candidate["status"]): string {
   if (status === "recommended") return "text-ok-text";
   if (status === "blocked") return "text-bad-text";
   return "text-muted";
+}
+
+/** Single-select dropdown filter chip. Opens right-aligned so the option list
+ * doesn't get clipped by the scrolling panel's `overflow-hidden`. */
+function FilterMenu({
+  label,
+  allLabel,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  allLabel: string;
+  value: string | null;
+  options: string[];
+  onChange: (v: string | null) => void;
+}) {
+  return (
+    <Menu
+      align="right"
+      widthClass="min-w-[180px] max-h-[280px] overflow-y-auto pa-scroll"
+      trigger={() => (
+        <span
+          className={`flex items-center gap-1.5 rounded-[7px] border px-2.5 py-1.5 text-[12px] font-semibold whitespace-nowrap ${
+            value ? "border-ok-line bg-ok-tint text-ok-text" : "border-line text-muted hover:text-body"
+          }`}
+        >
+          {value ?? label} ▾
+        </span>
+      )}
+    >
+      {(close) => (
+        <>
+          <MenuItem
+            active={value === null}
+            onClick={() => {
+              onChange(null);
+              close();
+            }}
+          >
+            {allLabel}
+          </MenuItem>
+          {options.map((o) => (
+            <MenuItem
+              key={o}
+              active={value === o}
+              onClick={() => {
+                onChange(o);
+                close();
+              }}
+            >
+              {o}
+            </MenuItem>
+          ))}
+        </>
+      )}
+    </Menu>
+  );
 }
 
 export function CandidateRow({
@@ -139,6 +198,10 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
   const { members } = resolveRoster(enclosure);
   const ruleset = effectiveRuleset(state, enclosure);
   const { strict, rankBy } = state.settings;
+  const [query, setQuery] = useState("");
+  const [family, setFamily] = useState<string | null>(null);
+  const [plantNeed, setPlantNeed] = useState<string | null>(null);
+  const [terrainNeed, setTerrainNeed] = useState<string | null>(null);
 
   const candidates = useMemo(() => {
     const period = enclosurePeriod(members.map((m) => m.species));
@@ -150,8 +213,65 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
     );
   }, [members, ruleset, strict, rankBy]);
 
+  const families = useMemo(
+    () => Array.from(new Set(candidates.map((c) => c.species.family))).sort(),
+    [candidates],
+  );
+  // Real feeder-plant labels (e.g. "Ground Leaf", "Cover") and terrain needs
+  // (e.g. "Wetland") from envNeeds — the dataset has no grassland/forest
+  // terrain category, so those aren't offered here.
+  const plantNeeds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          candidates.flatMap((c) =>
+            c.species.envNeeds.filter((n) => n.kind === "plant").map((n) => n.need),
+          ),
+        ),
+      ).sort(),
+    [candidates],
+  );
+  const terrainNeeds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          candidates.flatMap((c) =>
+            c.species.envNeeds.filter((n) => n.kind === "terrain").map((n) => n.need),
+          ),
+        ),
+      ).sort(),
+    [candidates],
+  );
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return candidates.filter((c) => {
+      if (family && c.species.family !== family) return false;
+      if (plantNeed && !c.species.envNeeds.some((n) => n.kind === "plant" && n.need === plantNeed))
+        return false;
+      if (
+        terrainNeed &&
+        !c.species.envNeeds.some((n) => n.kind === "terrain" && n.need === terrainNeed)
+      )
+        return false;
+      if (!q) return true;
+      return (
+        c.species.name.toLowerCase().includes(q) ||
+        c.species.family.toLowerCase().includes(q) ||
+        (c.species.genus?.toLowerCase().includes(q) ?? false)
+      );
+    });
+  }, [candidates, query, family, plantNeed, terrainNeed]);
+
   const rosterEmpty = members.length === 0;
   const fitLabel = ruleset.kind === "formation" ? "Formation fit" : "Period fit";
+  const filterDescriptors = [
+    query.trim() && `“${query.trim()}”`,
+    family,
+    plantNeed && `eats ${plantNeed}`,
+    terrainNeed && `prefers ${terrainNeed}`,
+  ].filter((d): d is string => Boolean(d));
+  const filtering = filterDescriptors.length > 0;
 
   return (
     <section className="flex min-h-0 flex-col overflow-hidden border-r border-line2">
@@ -191,6 +311,57 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
         </div>
       </div>
 
+      <div className="flex flex-wrap items-center gap-2 px-5 pb-2">
+        <div className="relative min-w-[160px] flex-1">
+          <span className="pa-mono pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-[12px] text-faint">
+            ⌕
+          </span>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search by name, family, genus…"
+            className="w-full rounded-[7px] border border-line bg-inset py-1.5 pr-2.5 pl-7 text-[12px] text-ink placeholder:text-faint focus:border-line2 focus:outline-none"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Clear search"
+              className="absolute top-1/2 right-2 -translate-y-1/2 text-[12px] text-faint hover:text-body"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+        <FilterMenu
+          label="Family"
+          allLabel="All families"
+          value={family}
+          options={families}
+          onChange={setFamily}
+        />
+        <FilterMenu
+          label="Diet"
+          allLabel="Any diet"
+          value={plantNeed}
+          options={plantNeeds}
+          onChange={setPlantNeed}
+        />
+        <FilterMenu
+          label="Terrain"
+          allLabel="Any terrain"
+          value={terrainNeed}
+          options={terrainNeeds}
+          onChange={setTerrainNeed}
+        />
+        {filtering && (
+          <span className="text-[11px] whitespace-nowrap text-muted">
+            {filtered.length} of {candidates.length}
+          </span>
+        )}
+      </div>
+
       {rosterEmpty && (
         <div className="mx-4 mb-2 flex items-center gap-3 rounded-[10px] border border-dashed border-dash bg-inset px-4 py-3">
           <span className="text-[15px] text-ok-text">✓</span>
@@ -205,12 +376,17 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
       )}
 
       <div className="pa-scroll flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 pb-4">
-        {candidates.map((c) => (
+        {filtered.map((c) => (
           <CandidateRow key={c.species.id} candidate={c} enclosureId={enclosure.id} />
         ))}
         {candidates.length === 0 && (
           <div className="px-2 py-6 text-center text-[12px] text-muted">
             No compatible candidates for this habitat.
+          </div>
+        )}
+        {candidates.length > 0 && filtered.length === 0 && (
+          <div className="px-2 py-6 text-center text-[12px] text-muted">
+            No candidates match {filterDescriptors.join(" · ")}.
           </div>
         )}
         <div className="flex items-center gap-1.5 px-1 pt-1 text-[11px] text-faint">
