@@ -1,0 +1,18 @@
+[
+  { "id": "cycad", "name": "Cycad", "covers": ["Ground Fiber", "Cover"], "form": "ground" },
+  { "id": "tree-fern", "name": "Tree Fern", "covers": ["Ground Leaf", "Cover"], "form": "ground" },
+  { "id": "horsetail", "name": "Horsetail", "covers": ["Ground Fiber", "Pasture"], "form": "ground" },
+  { "id": "sagaria", "name": "Sagaria", "covers": ["Ground Leaf", "Pasture"], "form": "ground" },
+  { "id": "zamites", "name": "Zamites", "covers": ["Ground Nut", "Cover"], "form": "ground" },
+  { "id": "bennettitales", "name": "Bennettitales", "covers": ["Ground Fruit", "Ground Fiber"], "form": "ground" },
+  { "id": "nilssonia", "name": "Nilssonia", "covers": ["Ground Nut", "Ground Leaf"], "form": "ground" },
+  { "id": "dryopteris", "name": "Dryopteris Fern", "covers": ["Ground Leaf"], "form": "ground" },
+  { "id": "sedge", "name": "Grassland Sedge", "covers": ["Pasture"], "form": "ground" },
+  { "id": "araucaria", "name": "Araucaria", "covers": ["Tall Nut", "Cover"], "form": "tall" },
+  { "id": "ginkgo", "name": "Ginkgo", "covers": ["Tall Leaf", "Tall Fruit"], "form": "tall" },
+  { "id": "monkey-puzzle", "name": "Monkey Puzzle", "covers": ["Tall Nut"], "form": "tall" },
+  { "id": "wollemia", "name": "Wollemia", "covers": ["Tall Leaf", "Cover"], "form": "tall" },
+  { "id": "metasequoia", "name": "Metasequoia", "covers": ["Tall Leaf", "Pasture"], "form": "tall" },
+  { "id": "pandanus", "name": "Pandanus", "covers": ["Tall Fruit", "Cover"], "form": "tall" },
+  { "id": "cordaites", "name": "Cordaites", "covers": ["Tall Leaf", "Ground Fiber"], "form": "tall" }
+]

@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Paddock Atlas — design tokens
+   Two skins authored in oklch:
+     - dark  = Classic Jurassic Park (chosen production skin)  [default]
+     - light = earlier reference skin
+   Roles are named so a value can differ per skin (e.g. the ruleset accent is
+   amber-gold in dark but purple in light). Components only ever read role
+   tokens, never raw colors.
+   ========================================================================== */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* surfaces (warm near-black, hue ~80) */
+  --pa-app: oklch(0.17 0.012 80);
+  --pa-panel: oklch(0.195 0.012 80);
+  --pa-card: oklch(0.21 0.012 80);
+  --pa-inset: oklch(0.24 0.014 80);
+  --pa-banner: oklch(0.21 0.02 72);
+  --pa-banner-line: oklch(0.34 0.04 72);
+
+  /* text */
+  --pa-ink: oklch(0.95 0.02 95);
+  --pa-ink2: oklch(0.85 0.02 90);
+  --pa-body: oklch(0.78 0.02 88);
+  --pa-muted: oklch(0.62 0.02 85);
+  --pa-faint: oklch(0.55 0.02 85);
+
+  /* lines */
+  --pa-line: oklch(0.32 0.02 80);
+  --pa-line2: oklch(0.3 0.015 80);
+  --pa-dash: oklch(0.4 0.02 80);
+
+  /* brand / cta / link */
+  --pa-cta: oklch(0.85 0.16 95);
+  --pa-cta-ink: oklch(0.18 0.02 95);
+  --pa-brand: oklch(0.85 0.16 95);
+  --pa-brand-ink: oklch(0.17 0.012 80);
+  --pa-link: oklch(0.72 0.15 250);
+
+  /* ruleset accent (amber-gold in dark) */
+  --pa-rule-fill: oklch(0.74 0.13 72);
+  --pa-rule-ink: oklch(0.18 0.02 72);
+  --pa-rule-text: oklch(0.78 0.1 72);
+  --pa-rule-tint: oklch(0.24 0.05 72);
+  --pa-rule-line: oklch(0.42 0.07 72);
+
+  /* accuracy / canon / anachronism (amber) */
+  --pa-acc-fill: oklch(0.74 0.13 72);
+  --pa-acc-ink: oklch(0.18 0.02 72);
+  --pa-acc-dot: oklch(0.74 0.13 72);
+  --pa-acc-text: oklch(0.82 0.12 72);
+  --pa-acc-tint: oklch(0.26 0.06 72);
+  --pa-acc-line: oklch(0.44 0.08 72);
+
+  /* green — recommended / contemporary / valid (hue 140) */
+  --pa-ok-dot: oklch(0.74 0.18 140);
+  --pa-ok-text: oklch(0.8 0.15 140);
+  --pa-ok-tint: oklch(0.25 0.05 140);
+  --pa-ok-line: oklch(0.4 0.09 140);
+
+  /* red — blocked / conflict / violation / fence (hue 27) */
+  --pa-bad-dot: oklch(0.62 0.21 27);
+  --pa-bad-text: oklch(0.8 0.15 27);
+  --pa-bad-tint: oklch(0.25 0.06 27);
+  --pa-bad-line: oklch(0.42 0.1 27);
+
+  /* blue — marine / aviary / InGen (hue 245) */
+  --pa-sea-accent: oklch(0.62 0.18 245);
+  --pa-sea-header: oklch(0.26 0.07 245);
+  --pa-sea-text: oklch(0.84 0.11 245);
+  --pa-sea-line: oklch(0.44 0.1 245);
+
+  /* teal — juvenile mode (hue 195) */
+  --pa-juv-accent: oklch(0.7 0.13 195);
+  --pa-juv-header: oklch(0.26 0.06 195);
+  --pa-juv-text: oklch(0.83 0.11 195);
+  --pa-juv-line: oklch(0.44 0.08 195);
+
+  /* neutral "allowed" dot */
+  --pa-dot-neutral: oklch(0.6 0.02 85);
+
+  /* hazard stripe + shadows */
+  --pa-hazard-a: oklch(0.85 0.16 95);
+  --pa-hazard-b: oklch(0.17 0.012 80);
+  --pa-shadow-frame: 0 28px 64px -30px oklch(0.05 0.01 80 / 0.8);
+  --pa-shadow-card: 0 14px 34px -22px oklch(0.05 0.01 80 / 0.7);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+
+  --pa-app: oklch(0.95 0.006 90);
+  --pa-panel: oklch(0.968 0.005 90);
+  --pa-card: oklch(0.985 0.004 90);
+  --pa-inset: oklch(0.97 0.005 90);
+  --pa-banner: oklch(0.965 0.014 300);
+  --pa-banner-line: oklch(0.88 0.03 300);
+
+  --pa-ink: oklch(0.24 0.01 90);
+  --pa-ink2: oklch(0.3 0.01 90);
+  --pa-body: oklch(0.4 0.01 90);
+  --pa-muted: oklch(0.5 0.01 90);
+  --pa-faint: oklch(0.6 0.01 90);
+
+  --pa-line: oklch(0.88 0.008 90);
+  --pa-line2: oklch(0.92 0.008 90);
+  --pa-dash: oklch(0.8 0.01 90);
+
+  --pa-cta: oklch(0.28 0.01 90);
+  --pa-cta-ink: oklch(0.98 0.004 90);
+  --pa-brand: oklch(0.55 0.13 150);
+  --pa-brand-ink: oklch(0.98 0.006 90);
+  --pa-link: oklch(0.55 0.13 250);
+
+  /* ruleset accent = purple in the reference skin */
+  --pa-rule-fill: oklch(0.5 0.13 300);
+  --pa-rule-ink: oklch(0.98 0.01 300);
+  --pa-rule-text: oklch(0.5 0.08 300);
+  --pa-rule-tint: oklch(0.965 0.014 300);
+  --pa-rule-line: oklch(0.85 0.04 300);
+
+  /* accuracy stays amber (hue 75) */
+  --pa-acc-fill: oklch(0.74 0.12 75);
+  --pa-acc-ink: oklch(0.99 0.02 75);
+  --pa-acc-dot: oklch(0.65 0.13 75);
+  --pa-acc-text: oklch(0.47 0.12 75);
+  --pa-acc-tint: oklch(0.965 0.04 75);
+  --pa-acc-line: oklch(0.83 0.07 75);
+
+  --pa-ok-dot: oklch(0.55 0.14 150);
+  --pa-ok-text: oklch(0.44 0.12 150);
+  --pa-ok-tint: oklch(0.975 0.025 150);
+  --pa-ok-line: oklch(0.84 0.05 150);
+
+  --pa-bad-dot: oklch(0.58 0.18 25);
+  --pa-bad-text: oklch(0.5 0.15 25);
+  --pa-bad-tint: oklch(0.975 0.018 25);
+  --pa-bad-line: oklch(0.86 0.06 25);
+
+  --pa-sea-accent: oklch(0.55 0.15 245);
+  --pa-sea-header: oklch(0.95 0.03 245);
+  --pa-sea-text: oklch(0.42 0.12 245);
+  --pa-sea-line: oklch(0.84 0.06 245);
+
+  --pa-juv-accent: oklch(0.58 0.11 195);
+  --pa-juv-header: oklch(0.95 0.03 195);
+  --pa-juv-text: oklch(0.4 0.09 195);
+  --pa-juv-line: oklch(0.83 0.05 195);
+
+  --pa-dot-neutral: oklch(0.72 0.01 90);
+
+  --pa-hazard-a: oklch(0.82 0.15 95);
+  --pa-hazard-b: oklch(0.95 0.006 90);
+  --pa-shadow-frame: 0 24px 60px -30px oklch(0.4 0.02 90 / 0.5);
+  --pa-shadow-card: 0 14px 34px -22px oklch(0.4 0.02 90 / 0.5);
+}
+
+/* ---- expose tokens to Tailwind utilities (inline = resolve var at runtime) ---- */
+@theme inline {
+  --color-app: var(--pa-app);
+  --color-panel: var(--pa-panel);
+  --color-card: var(--pa-card);
+  --color-inset: var(--pa-inset);
+  --color-banner: var(--pa-banner);
+  --color-banner-line: var(--pa-banner-line);
+
+  --color-ink: var(--pa-ink);
+  --color-ink2: var(--pa-ink2);
+  --color-body: var(--pa-body);
+  --color-muted: var(--pa-muted);
+  --color-faint: var(--pa-faint);
+
+  --color-line: var(--pa-line);
+  --color-line2: var(--pa-line2);
+  --color-dash: var(--pa-dash);
+
+  --color-cta: var(--pa-cta);
+  --color-cta-ink: var(--pa-cta-ink);
+  --color-brand: var(--pa-brand);
+  --color-brand-ink: var(--pa-brand-ink);
+  --color-link: var(--pa-link);
+
+  --color-rule-fill: var(--pa-rule-fill);
+  --color-rule-ink: var(--pa-rule-ink);
+  --color-rule-text: var(--pa-rule-text);
+  --color-rule-tint: var(--pa-rule-tint);
+  --color-rule-line: var(--pa-rule-line);
+
+  --color-acc-fill: var(--pa-acc-fill);
+  --color-acc-ink: var(--pa-acc-ink);
+  --color-acc-dot: var(--pa-acc-dot);
+  --color-acc-text: var(--pa-acc-text);
+  --color-acc-tint: var(--pa-acc-tint);
+  --color-acc-line: var(--pa-acc-line);
+
+  --color-ok-dot: var(--pa-ok-dot);
+  --color-ok-text: var(--pa-ok-text);
+  --color-ok-tint: var(--pa-ok-tint);
+  --color-ok-line: var(--pa-ok-line);
+
+  --color-bad-dot: var(--pa-bad-dot);
+  --color-bad-text: var(--pa-bad-text);
+  --color-bad-tint: var(--pa-bad-tint);
+  --color-bad-line: var(--pa-bad-line);
+
+  --color-sea-accent: var(--pa-sea-accent);
+  --color-sea-header: var(--pa-sea-header);
+  --color-sea-text: var(--pa-sea-text);
+  --color-sea-line: var(--pa-sea-line);
+
+  --color-juv-accent: var(--pa-juv-accent);
+  --color-juv-header: var(--pa-juv-header);
+  --color-juv-text: var(--pa-juv-text);
+  --color-juv-line: var(--pa-juv-line);
+
+  --color-dot-neutral: var(--pa-dot-neutral);
+
+  --font-sans: var(--font-ibm-sans), "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: var(--font-ibm-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius-chip: 7px;
+  --radius-panel: 10px;
+  --radius-card: 13px;
+}
+
+/* ---- base ---- */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--pa-app);
+  color: var(--pa-body);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a {
+  color: var(--pa-link);
+  text-decoration: none;
+}
+
+/* ---- small reusable primitives ---- */
+.pa-frame-shadow {
+  box-shadow: var(--pa-shadow-frame);
+}
+.pa-card-shadow {
+  box-shadow: var(--pa-shadow-card);
+}
+.pa-hazard {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--pa-hazard-a) 0,
+    var(--pa-hazard-a) 12px,
+    var(--pa-hazard-b) 12px,
+    var(--pa-hazard-b) 24px
+  );
+}
+.pa-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pa-muted);
+}
+.pa-mono {
+  font-family: var(--font-mono);
+}
+@keyframes pa-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+.pa-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--pa-line) transparent;
+}
+.pa-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.pa-scroll::-webkit-scrollbar-thumb {
+  background: var(--pa-line);
+  border-radius: 8px;
+}

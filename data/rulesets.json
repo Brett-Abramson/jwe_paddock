@@ -1,0 +1,155 @@
+[
+  {
+    "id": "sandbox",
+    "kind": "sandbox",
+    "label": "Sandbox",
+    "note": "Anything goes — no accuracy checks."
+  },
+  {
+    "id": "period-late-cretaceous",
+    "kind": "period",
+    "label": "Period · Late Cretaceous",
+    "period": "Late Cretaceous",
+    "note": "Species from other periods are flagged, not hidden."
+  },
+  {
+    "id": "period-early-cretaceous",
+    "kind": "period",
+    "label": "Period · Early Cretaceous",
+    "period": "Early Cretaceous",
+    "note": "Species from other periods are flagged, not hidden."
+  },
+  {
+    "id": "period-late-jurassic",
+    "kind": "period",
+    "label": "Period · Late Jurassic",
+    "period": "Late Jurassic",
+    "note": "Species from other periods are flagged, not hidden."
+  },
+  {
+    "id": "period-holocene",
+    "kind": "period",
+    "label": "Period · Holocene",
+    "period": "Holocene",
+    "note": "Species from other periods are flagged, not hidden."
+  },
+  {
+    "id": "period-early-jurassic",
+    "kind": "period",
+    "label": "Period · Early Jurassic",
+    "period": "Early Jurassic",
+    "note": "Species from other periods are flagged, not hidden."
+  },
+  {
+    "id": "period-late-triassic",
+    "kind": "period",
+    "label": "Period · Late Triassic",
+    "period": "Late Triassic",
+    "note": "Species from other periods are flagged, not hidden."
+  },
+  {
+    "id": "formation-nemegt-formation",
+    "kind": "formation",
+    "label": "Formation · Nemegt",
+    "formation": "Nemegt Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-lance-formation",
+    "kind": "formation",
+    "label": "Formation · Lance",
+    "formation": "Lance Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-morrison-formation",
+    "kind": "formation",
+    "label": "Formation · Morrison",
+    "formation": "Morrison Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-dinosaur-park-formation",
+    "kind": "formation",
+    "label": "Formation · Dinosaur Park",
+    "formation": "Dinosaur Park Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-hell-creek-formation",
+    "kind": "formation",
+    "label": "Formation · Hell Creek",
+    "formation": "Hell Creek Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-cedar-mountain-formation",
+    "kind": "formation",
+    "label": "Formation · Cedar Mountain",
+    "formation": "Cedar Mountain Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-frenchman-formation",
+    "kind": "formation",
+    "label": "Formation · Frenchman",
+    "formation": "Frenchman Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-horseshoe-canyon-formation",
+    "kind": "formation",
+    "label": "Formation · Horseshoe Canyon",
+    "formation": "Horseshoe Canyon Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-scollard-formation",
+    "kind": "formation",
+    "label": "Formation · Scollard",
+    "formation": "Scollard Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-cleveland-lloyd-dinosaur-quarry",
+    "kind": "formation",
+    "label": "Formation · Cleveland Lloyd Dinosaur Quarry",
+    "formation": "Cleveland Lloyd Dinosaur Quarry",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-dinosaur-national-monument",
+    "kind": "formation",
+    "label": "Formation · Dinosaur National Monument",
+    "formation": "Dinosaur National Monument",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-jurassic-coast",
+    "kind": "formation",
+    "label": "Formation · Jurassic Coast",
+    "formation": "Jurassic Coast",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-oxford-clay",
+    "kind": "formation",
+    "label": "Formation · Oxford Clay",
+    "formation": "Oxford Clay",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-romualdo-formation",
+    "kind": "formation",
+    "label": "Formation · Romualdo",
+    "formation": "Romualdo Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  },
+  {
+    "id": "formation-ziliujing-formation",
+    "kind": "formation",
+    "label": "Formation · Ziliujing",
+    "formation": "Ziliujing Formation",
+    "note": "Species that never shared this dig-site formation are flagged."
+  }
+]
