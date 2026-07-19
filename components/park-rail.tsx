@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useApp } from "@/lib/store";
 import { MANIFEST, PLANTS } from "@/lib/data";
@@ -13,7 +13,7 @@ import {
   isParkCustom,
 } from "@/lib/selectors";
 import { enclosureHealth } from "@/lib/engine";
-import type { Enclosure } from "@/lib/types";
+import type { Enclosure, Park } from "@/lib/types";
 import { Menu, MenuItem } from "./ui/menu";
 import { shortRulesetLabel } from "./ruleset-control";
 import { HatcheryPanel } from "./hatchery-panel";
@@ -136,6 +136,91 @@ function EnclosureMenuContent({
         Delete enclosure
       </button>
     </>
+  );
+}
+
+function ParkRow({
+  park,
+  active,
+  onSelect,
+  close,
+}: {
+  park: Park;
+  active: boolean;
+  onSelect: () => void;
+  close: () => void;
+}) {
+  const { dispatch } = useApp();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(park.name);
+  // This row lives inside a Menu popover, which closes (and unmounts this
+  // input) on the same outside "mousedown" that would blur it — the blur's
+  // default action runs after that, too late to commit. Rename live on every
+  // keystroke instead of on blur, so there's nothing left to race.
+  const originalName = useRef(park.name);
+
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={() => {
+        if (!editing) {
+          onSelect();
+          close();
+        }
+      }}
+      onKeyDown={(e) => {
+        if (!editing && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          onSelect();
+          close();
+        }
+      }}
+      className={`flex w-full cursor-pointer items-center gap-2 rounded-[6px] px-3 py-2 text-left text-[13px] ${
+        active ? "bg-inset text-ink" : "text-body hover:bg-inset"
+      }`}
+    >
+      {editing ? (
+        <input
+          autoFocus
+          value={draft}
+          onChange={(e) => {
+            const value = e.target.value;
+            setDraft(value);
+            const trimmed = value.trim();
+            if (trimmed) dispatch({ type: "RENAME_PARK", parkId: park.id, name: trimmed });
+          }}
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") setEditing(false);
+            if (e.key === "Escape") {
+              dispatch({ type: "RENAME_PARK", parkId: park.id, name: originalName.current });
+              setDraft(originalName.current);
+              setEditing(false);
+            }
+          }}
+          onBlur={() => setEditing(false)}
+          className="min-w-0 flex-1 rounded-[5px] border border-line bg-app px-1.5 py-0.5 text-[13px] font-medium text-ink focus:outline-none"
+        />
+      ) : (
+        <span className="min-w-0 flex-1 truncate">{park.name}</span>
+      )}
+      <span className="pa-mono flex-none text-[10px] text-muted">{park.enclosureIds.length}</span>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          originalName.current = park.name;
+          setDraft(park.name);
+          setEditing(true);
+        }}
+        title="Rename park"
+        aria-label={`Rename ${park.name}`}
+        className="flex-none cursor-pointer rounded-[5px] px-1 py-0.5 text-[12px] text-muted hover:bg-app/40 hover:text-body"
+      >
+        ✎
+      </button>
+    </div>
   );
 }
 
@@ -275,19 +360,13 @@ export function ParkRail() {
           {(close) => (
             <>
               {state.parks.map((p) => (
-                <MenuItem
+                <ParkRow
                   key={p.id}
+                  park={p}
                   active={p.id === park.id}
-                  onClick={() => {
-                    dispatch({ type: "SELECT_PARK", parkId: p.id });
-                    close();
-                  }}
-                >
-                  <span className="flex-1">{p.name}</span>
-                  <span className="pa-mono text-[10px] text-muted">
-                    {p.enclosureIds.length}
-                  </span>
-                </MenuItem>
+                  onSelect={() => dispatch({ type: "SELECT_PARK", parkId: p.id })}
+                  close={close}
+                />
               ))}
               <div className="my-1 h-px bg-line2" />
               <MenuItem
