@@ -351,9 +351,9 @@ export function buildRequirements(
       ...p,
       changed:
         juvenileActive &&
-        p.covers.some((c) => {
-          const now = planNeeds.find((n) => n.need === c)?.area ?? 0;
-          return Math.round(now) !== Math.round(baseByNeed.get(c) ?? 0);
+        p.supplies.some((s) => {
+          const now = planNeeds.find((n) => n.need === s.need)?.area ?? 0;
+          return Math.round(now) !== Math.round(baseByNeed.get(s.need) ?? 0);
         }),
     }));
 

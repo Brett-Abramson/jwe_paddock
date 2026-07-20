@@ -35,18 +35,35 @@ together, or the cast in `lib/data.ts` will lie to you at runtime.
 `Species.envNeeds[]` is `{ need, area (m²), pct?, kind }`. `kind` decides which card renders it:
 
 - `plant` → the set-cover plant plan: `Cover`, `Pasture`, `Ground Fiber/Leaf/Fruit/Nut`,
-  `Tall Leaf/Fruit/Nut`
+  `Tall Leaf/Fruit/Nut`, `Arid`, `Barren`, `Wetland`
 - `food` → feeders: `Prey`, `Fish`, `Meat`
-- `terrain` → terrain & water: `Water`, `Wetland`, `Arid`, `Barren`, `Open Water`, `Deep Water`
+- `terrain` → dug/built water only: `Water`, `Open Water`, `Deep Water`
 
-`Cover` and `Pasture` are plant-coverable but are **not** feeder needs — only the
-Ground*/Tall* families drive a paleobotany feeder.
+`Cover`/`Pasture`/`Arid`/`Barren`/`Wetland` are plant-coverable but are **not** feeder needs —
+only the Ground*/Tall* families drive a paleobotany feeder. `Arid`/`Barren`/`Wetland` moved from
+`terrain` to `plant` because JWE3 paints them with the same brush tool as flora (see
+`PLANT_NEEDS` in `scripts/ingest.mjs`); real dug water did not move.
 
-## Editing plants.json
+## Editing plants.json — the brush/yield model
 
-Every `covers` entry must be an exact env-need string from the list above, or the set-cover
-optimizer will silently never select that plant. Order matters: greedy set-cover breaks ties by
-array order, so the file order is the deterministic tie-break.
+JWE3 doesn't give you a checklist of flora, it gives you **brushes**: pick a plant, paint an
+area, and that one stroke produces every need in its `provides` list at once, each at its own
+rate. `Plant` (`lib/types.ts`) is `{ id, name, category, provides: [{ need, rate }] }`.
 
+- `category` is cosmetic (matches the game's brush grouping: `Leaf, Fiber, Fruit & Nut` ·
+  `Cover & Pasture` · `Arid & Barren` · `Wetland`) — the optimizer doesn't use it.
+- `need` must be an exact env-need string from the list above, or the optimizer will silently
+  never select that plant for it. `Tall Fiber` is a legitimate exception: it's a real JWE3 yield
+  (Calamites, Cycad Grove) but no scraped species currently needs it, so it just never gets
+  picked — that's expected, not a bug.
+- `rate` is **m² of that need satisfied per m² painted**. JWE3 shows this as 2 or 3 up-arrows in
+  the brush UI, not a number — this dataset reads that literally as a 2x/3x multiplier (`+` → 2,
+  `++` → 3). If a real numeric source ever surfaces, replace these, don't guess further.
+- Order matters: greedy set-cover breaks ties by array order, so the file order is the
+  deterministic tie-break.
+
+The optimizer (`lib/engine/plants.ts`) paints a plant enough to fully satisfy the largest
+still-open need it targets, which over-supplies its other needs from the same stroke — that's
+realistic (JWE3 painting is one area, not per-need) and reported as extra `supplies`, not waste.
 Any need with no plant covering it surfaces as "No plant covers: X" in the UI — that's the
 signal you've added a species need without a matching plant.

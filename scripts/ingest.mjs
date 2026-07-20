@@ -70,7 +70,11 @@ const CONTINENT_FIXUPS = { "jwe3-digsite:india": "Asia" };
 
 const HABITAT = { Terrestrial: "land", Aquatic: "marine", Aerial: "aviary" };
 
-/** Needs a plant can satisfy; everything else is terrain/water infrastructure. */
+/**
+ * Needs a plant brush can satisfy. JWE3 paints terrain surface (Arid, Barren,
+ * Wetland) with the same brush system as flora, so those are plant needs too
+ * — only actual dug/built water (Water, Open Water, Deep Water) is terrain.
+ */
 const PLANT_NEEDS = new Set([
   "Cover",
   "Pasture",
@@ -81,6 +85,9 @@ const PLANT_NEEDS = new Set([
   "Tall Leaf",
   "Tall Fruit",
   "Tall Nut",
+  "Arid",
+  "Barren",
+  "Wetland",
 ]);
 /** Needs satisfied by a feeder rather than terrain or flora. */
 const FOOD_NEEDS = new Set(["Prey", "Fish", "Meat"]);

@@ -122,7 +122,7 @@ lib/
   engine/
     accuracy.ts         reality layer (canon / formation / contemporaneity)
     candidates.ts       game layer + reasons + repairs + rank-by
-    plants.ts           greedy set-cover optimizer
+    plants.ts           greedy set-cover over paint-brush yields
     requirements.ts     derived build requirements
 scripts/
   ingest.mjs            paleo.gg scrape -> app dataset (+ data-quality report)
@@ -134,7 +134,7 @@ data/
   rulesets.json         sandbox / period / formation — GENERATED
   formations.json       dig-site formations — GENERATED
   manifest.json         freshness + provenance — GENERATED
-  plants.json           plant → needs table (hand-curated)
+  plants.json           plant brush → yield table (hand-curated)
   periods.json          geologic era → mya ranges
 ```
 
@@ -166,9 +166,11 @@ files.** The ingest prints a data-quality report and applies these rules:
   with no fossil record, so they're flagged `isHybrid` and get a "⚠ Hybrid" chip instead of
   a meaningless "~83 my out of place".
 
-`data/plants.json` is the one **hand-curated** file — paleo.gg publishes no flora database,
-so the plant→needs table is authored. The *needs* it satisfies (Tall Nut, Ground Fiber…)
-and their m² amounts are real.
+`data/plants.json` is the one **hand-curated** file — paleo.gg publishes no flora database, so
+it's authored from JWE3's plant-painting brushes: each plant produces one or more needs at once
+at a rate (2x/3x, shown in-game as up-arrows) when its area is painted. The *needs* it satisfies
+(Tall Nut, Ground Fiber, Arid, Wetland…) and their m² amounts are real; see
+[data/AGENTS.md](data/AGENTS.md) for the yield model.
 
 ### What this source does not carry
 

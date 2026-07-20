@@ -77,12 +77,26 @@ export interface Species {
   description?: string;
 }
 
+/** The four brush categories JWE3's plant-painting tool groups flora/terrain into. */
+export type PlantCategory =
+  | "Leaf, Fiber, Fruit & Nut"
+  | "Cover & Pasture"
+  | "Arid & Barren"
+  | "Wetland";
+
+export interface PlantYield {
+  /** env-need label this produces when painted, e.g. "Ground Leaf" */
+  need: string;
+  /** m² of need satisfied per m² painted — the in-game "+" tier is 2, "++" is 3 */
+  rate: number;
+}
+
 export interface Plant {
   id: string;
   name: string;
-  /** env-need labels this plant satisfies */
-  covers: string[];
-  form: "ground" | "tall";
+  category: PlantCategory;
+  /** what painting this plant produces, and at what rate; one paint area can yield several */
+  provides: PlantYield[];
 }
 
 export type RulesetKind = "sandbox" | "period" | "formation" | "custom";

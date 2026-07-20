@@ -14,7 +14,7 @@ data/*.json → data.ts → engine/*  (pure)  → selectors.ts → store.tsx →
 | `data.ts` | typed JSON loader + indexes (`getSpecies`, `getRuleset`, `periodRange`) |
 | `engine/accuracy.ts` | reality layer: Period / Formation / hybrid |
 | `engine/candidates.ts` | game layer: status, reason text, repairs, rank-by |
-| `engine/plants.ts` | greedy set-cover over m² needs |
+| `engine/plants.ts` | greedy set-cover over m² needs, via paint-brush yield rates |
 | `engine/requirements.ts` | accuracy report, plants, terrain, fence, feeders, population |
 | `selectors.ts` | `AppState` → engine inputs; splits out data drift |
 | `store.tsx` | reducer + context + `localStorage` |

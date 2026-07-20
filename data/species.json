@@ -132,19 +132,19 @@
         "need": "Wetland",
         "area": 5242,
         "pct": 70,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Barren",
         "area": 806,
         "pct": 11,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Arid",
         "area": 445,
         "pct": 6,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -349,7 +349,7 @@
         "need": "Wetland",
         "area": 280,
         "pct": 10,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -578,7 +578,7 @@
         "need": "Wetland",
         "area": 1021,
         "pct": 19,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fruit",
@@ -1227,7 +1227,7 @@
         "need": "Wetland",
         "area": 5820,
         "pct": 51,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -1332,13 +1332,13 @@
         "need": "Wetland",
         "area": 2100,
         "pct": 26,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Barren",
         "area": 2100,
         "pct": 26,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Deep Water",
@@ -1437,7 +1437,7 @@
         "need": "Wetland",
         "area": 3145,
         "pct": 19,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Tall Nut",
@@ -1554,13 +1554,13 @@
         "need": "Barren",
         "area": 300,
         "pct": 15,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Arid",
         "area": 1200,
         "pct": 60,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -1626,13 +1626,13 @@
         "need": "Wetland",
         "area": 3824,
         "pct": 45,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Arid",
         "area": 3824,
         "pct": 45,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -1736,13 +1736,13 @@
         "need": "Wetland",
         "area": 808,
         "pct": 47,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Arid",
         "area": 254,
         "pct": 15,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -1814,7 +1814,7 @@
         "need": "Wetland",
         "area": 3177,
         "pct": 37,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -2292,7 +2292,7 @@
         "need": "Arid",
         "area": 719,
         "pct": 45,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Meat",
@@ -2744,7 +2744,7 @@
         "need": "Wetland",
         "area": 500,
         "pct": 10,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -2853,7 +2853,7 @@
         "need": "Wetland",
         "area": 7662,
         "pct": 77,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Meat",
@@ -2962,7 +2962,7 @@
         "need": "Wetland",
         "area": 2360,
         "pct": 33,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -3064,7 +3064,7 @@
         "need": "Arid",
         "area": 3165,
         "pct": 42,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Deep Water",
@@ -3168,7 +3168,7 @@
         "need": "Arid",
         "area": 320,
         "pct": 20,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -3244,7 +3244,7 @@
         "need": "Wetland",
         "area": 3186,
         "pct": 28,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Tall Fruit",
@@ -3368,7 +3368,7 @@
         "need": "Wetland",
         "area": 10000,
         "pct": 50,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -3525,7 +3525,7 @@
         "need": "Wetland",
         "area": 414,
         "pct": 9,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Leaf",
@@ -3618,7 +3618,7 @@
         "need": "Wetland",
         "area": 4414,
         "pct": 29,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Tall Fruit",
@@ -3895,7 +3895,7 @@
         "need": "Wetland",
         "area": 2244,
         "pct": 31,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -4002,7 +4002,7 @@
         "need": "Wetland",
         "area": 959,
         "pct": 16,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Leaf",
@@ -4116,7 +4116,7 @@
         "need": "Wetland",
         "area": 1077,
         "pct": 27,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -4194,7 +4194,7 @@
         "need": "Wetland",
         "area": 2198,
         "pct": 18,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -4702,7 +4702,7 @@
         "need": "Wetland",
         "area": 805,
         "pct": 39,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Leaf",
@@ -4890,7 +4890,7 @@
         "need": "Wetland",
         "area": 4775,
         "pct": 54,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fruit",
@@ -5191,7 +5191,7 @@
         "need": "Barren",
         "area": 1790,
         "pct": 10,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -5354,13 +5354,13 @@
         "need": "Wetland",
         "area": 2500,
         "pct": 30,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Barren",
         "area": 1000,
         "pct": 12,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Deep Water",
@@ -5676,7 +5676,7 @@
         "need": "Wetland",
         "area": 1527,
         "pct": 36,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -6026,7 +6026,7 @@
         "need": "Barren",
         "area": 500,
         "pct": 7,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -6619,7 +6619,7 @@
         "need": "Arid",
         "area": 644,
         "pct": 30,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Meat",
@@ -6832,7 +6832,7 @@
         "need": "Wetland",
         "area": 4080,
         "pct": 54,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -7333,7 +7333,7 @@
         "need": "Wetland",
         "area": 1749,
         "pct": 30,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -7439,7 +7439,7 @@
         "need": "Wetland",
         "area": 1200,
         "pct": 14,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fruit",
@@ -7697,7 +7697,7 @@
         "need": "Wetland",
         "area": 2836,
         "pct": 60,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Leaf",
@@ -7787,7 +7787,7 @@
         "need": "Wetland",
         "area": 2406,
         "pct": 40,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Nut",
@@ -8432,7 +8432,7 @@
         "need": "Barren",
         "area": 439,
         "pct": 12,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -8616,7 +8616,7 @@
         "need": "Barren",
         "area": 485,
         "pct": 6,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -8713,19 +8713,19 @@
         "need": "Wetland",
         "area": 500,
         "pct": 7,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Barren",
         "area": 2800,
         "pct": 39,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Arid",
         "area": 1900,
         "pct": 26,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -9078,7 +9078,7 @@
         "need": "Wetland",
         "area": 329,
         "pct": 6,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -9457,7 +9457,7 @@
         "need": "Wetland",
         "area": 3000,
         "pct": 25,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Deep Water",
@@ -10039,7 +10039,7 @@
         "need": "Wetland",
         "area": 1003,
         "pct": 25,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -10145,7 +10145,7 @@
         "need": "Arid",
         "area": 1330,
         "pct": 16,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Deep Water",
@@ -10316,13 +10316,13 @@
         "need": "Wetland",
         "area": 500,
         "pct": 8,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Barren",
         "area": 627,
         "pct": 10,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Fish",
@@ -10549,7 +10549,7 @@
         "need": "Wetland",
         "area": 5522,
         "pct": 31,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Tall Leaf",
@@ -10788,7 +10788,7 @@
         "need": "Wetland",
         "area": 1023,
         "pct": 20,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Ground Fiber",
@@ -11207,7 +11207,7 @@
         "need": "Arid",
         "area": 2662,
         "pct": 15,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",
@@ -11317,7 +11317,7 @@
         "need": "Wetland",
         "area": 2075,
         "pct": 19,
-        "kind": "terrain"
+        "kind": "plant"
       },
       {
         "need": "Prey",

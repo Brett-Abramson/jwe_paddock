@@ -1,18 +1,169 @@
 [
-  { "id": "cycad", "name": "Cycad", "covers": ["Ground Fiber", "Cover"], "form": "ground" },
-  { "id": "tree-fern", "name": "Tree Fern", "covers": ["Ground Leaf", "Cover"], "form": "ground" },
-  { "id": "horsetail", "name": "Horsetail", "covers": ["Ground Fiber", "Pasture"], "form": "ground" },
-  { "id": "sagaria", "name": "Sagaria", "covers": ["Ground Leaf", "Pasture"], "form": "ground" },
-  { "id": "zamites", "name": "Zamites", "covers": ["Ground Nut", "Cover"], "form": "ground" },
-  { "id": "bennettitales", "name": "Bennettitales", "covers": ["Ground Fruit", "Ground Fiber"], "form": "ground" },
-  { "id": "nilssonia", "name": "Nilssonia", "covers": ["Ground Nut", "Ground Leaf"], "form": "ground" },
-  { "id": "dryopteris", "name": "Dryopteris Fern", "covers": ["Ground Leaf"], "form": "ground" },
-  { "id": "sedge", "name": "Grassland Sedge", "covers": ["Pasture"], "form": "ground" },
-  { "id": "araucaria", "name": "Araucaria", "covers": ["Tall Nut", "Cover"], "form": "tall" },
-  { "id": "ginkgo", "name": "Ginkgo", "covers": ["Tall Leaf", "Tall Fruit"], "form": "tall" },
-  { "id": "monkey-puzzle", "name": "Monkey Puzzle", "covers": ["Tall Nut"], "form": "tall" },
-  { "id": "wollemia", "name": "Wollemia", "covers": ["Tall Leaf", "Cover"], "form": "tall" },
-  { "id": "metasequoia", "name": "Metasequoia", "covers": ["Tall Leaf", "Pasture"], "form": "tall" },
-  { "id": "pandanus", "name": "Pandanus", "covers": ["Tall Fruit", "Cover"], "form": "tall" },
-  { "id": "cordaites", "name": "Cordaites", "covers": ["Tall Leaf", "Ground Fiber"], "form": "tall" }
+  {
+    "id": "tempskya",
+    "name": "Tempskya",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [
+      { "need": "Ground Leaf", "rate": 3 },
+      { "need": "Tall Leaf", "rate": 3 }
+    ]
+  },
+  {
+    "id": "leafy-climbers",
+    "name": "Leafy Climbers",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [{ "need": "Ground Leaf", "rate": 3 }]
+  },
+  {
+    "id": "calamites",
+    "name": "Calamites",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [
+      { "need": "Ground Fiber", "rate": 2 },
+      { "need": "Tall Fiber", "rate": 3 }
+    ]
+  },
+  {
+    "id": "fibrous-low-plants",
+    "name": "Fibrous Low Plants",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [{ "need": "Ground Fiber", "rate": 3 }]
+  },
+  {
+    "id": "cycad-grove",
+    "name": "Cycad Grove",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [
+      { "need": "Ground Fiber", "rate": 2 },
+      { "need": "Ground Fruit", "rate": 3 },
+      { "need": "Tall Fiber", "rate": 2 },
+      { "need": "Tall Fruit", "rate": 3 }
+    ]
+  },
+  {
+    "id": "ginkgo",
+    "name": "Ginkgo",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [
+      { "need": "Tall Fruit", "rate": 2 },
+      { "need": "Tall Leaf", "rate": 3 }
+    ]
+  },
+  {
+    "id": "seed-plants",
+    "name": "Seed Plants",
+    "category": "Leaf, Fiber, Fruit & Nut",
+    "provides": [
+      { "need": "Ground Nut", "rate": 3 },
+      { "need": "Tall Nut", "rate": 3 }
+    ]
+  },
+  {
+    "id": "woodland",
+    "name": "Woodland",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Cover", "rate": 3 }]
+  },
+  {
+    "id": "conifer-woodland",
+    "name": "Conifer Woodland",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Cover", "rate": 3 }]
+  },
+  {
+    "id": "autumnal-woodland",
+    "name": "Autumnal Woodland",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Cover", "rate": 3 }]
+  },
+  {
+    "id": "cherry-tree-woodland",
+    "name": "Cherry Tree Woodland",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Cover", "rate": 3 }]
+  },
+  {
+    "id": "brushland",
+    "name": "Brushland",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Pasture", "rate": 3 }]
+  },
+  {
+    "id": "grassland",
+    "name": "Grassland",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Pasture", "rate": 3 }]
+  },
+  {
+    "id": "grass",
+    "name": "Grass",
+    "category": "Cover & Pasture",
+    "provides": [{ "need": "Pasture", "rate": 3 }]
+  },
+  {
+    "id": "arid-grassland",
+    "name": "Arid Grassland",
+    "category": "Arid & Barren",
+    "provides": [{ "need": "Arid", "rate": 3 }]
+  },
+  {
+    "id": "arid-soil",
+    "name": "Arid Soil",
+    "category": "Arid & Barren",
+    "provides": [{ "need": "Arid", "rate": 3 }]
+  },
+  {
+    "id": "sand",
+    "name": "Sand",
+    "category": "Arid & Barren",
+    "provides": [{ "need": "Arid", "rate": 3 }]
+  },
+  {
+    "id": "boulder-wastes",
+    "name": "Boulder Wastes",
+    "category": "Arid & Barren",
+    "provides": [{ "need": "Barren", "rate": 3 }]
+  },
+  {
+    "id": "rock-strewn-flatland",
+    "name": "Rock-strewn Flatland",
+    "category": "Arid & Barren",
+    "provides": [{ "need": "Barren", "rate": 3 }]
+  },
+  {
+    "id": "barren-wilds",
+    "name": "Barren Wilds",
+    "category": "Arid & Barren",
+    "provides": [{ "need": "Barren", "rate": 3 }]
+  },
+  {
+    "id": "swamp",
+    "name": "Swamp",
+    "category": "Wetland",
+    "provides": [
+      { "need": "Wetland", "rate": 2 },
+      { "need": "Cover", "rate": 2 }
+    ]
+  },
+  {
+    "id": "cypress-swamp",
+    "name": "Cypress Swamp",
+    "category": "Wetland",
+    "provides": [
+      { "need": "Wetland", "rate": 2 },
+      { "need": "Cover", "rate": 2 }
+    ]
+  },
+  {
+    "id": "bog",
+    "name": "Bog",
+    "category": "Wetland",
+    "provides": [{ "need": "Wetland", "rate": 3 }]
+  },
+  {
+    "id": "marsh",
+    "name": "Marsh",
+    "category": "Wetland",
+    "provides": [{ "need": "Wetland", "rate": 3 }]
+  }
 ]

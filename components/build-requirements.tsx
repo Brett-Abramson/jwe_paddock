@@ -68,8 +68,12 @@ function PlantCard({ req }: { req: Reqs }) {
               style={{ background: p.changed ? "var(--pa-juv-accent)" : "var(--pa-ok-dot)" }}
             />
             <span className="font-semibold text-ink">{p.plant.name}</span>
-            <span className="pa-mono text-[10px] text-muted">{p.covers.join(" + ")}</span>
-            <span className="pa-mono ml-auto text-[10px] text-body">{formatArea(p.area)}</span>
+            <span className="pa-mono text-[10px] text-muted">
+              {p.supplies.map((s) => s.need).join(" + ")}
+            </span>
+            <span className="pa-mono ml-auto text-[10px] text-body">
+              {formatArea(p.paintArea)} painted
+            </span>
           </div>
         ))}
         {plantPlan.uncovered.length > 0 && (
