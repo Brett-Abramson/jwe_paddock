@@ -37,6 +37,7 @@ function HealthStrip({ enclosure }: { enclosure: Enclosure }) {
   return (
     <div className="pa-mono flex flex-wrap items-center gap-1.5 text-[10px]">
       <span
+        title="Roster conflicts — pairs of species in this enclosure that dislike each other"
         className={`flex items-center gap-1 ${h.conflicts > 0 ? "text-bad-text" : "text-ok-text"}`}
       >
         <span
@@ -46,13 +47,23 @@ function HealthStrip({ enclosure }: { enclosure: Enclosure }) {
         {h.conflicts}
       </span>
       {sep}
-      <span className="text-body">Fence {h.fenceTier}</span>
+      <span className="text-body" title="Fence tier required — set by the roster's highest security rating">
+        Fence {h.fenceTier}
+      </span>
       {sep}
-      <span className="text-muted">{h.plantCount} plants</span>
+      <span
+        className="text-muted"
+        title="Distinct plants needed to cover this roster's habitat needs"
+      >
+        {h.plantCount} plants
+      </span>
       {h.anachronismCount > 0 && (
         <>
           {sep}
-          <span className="flex items-center gap-1 text-acc-text">
+          <span
+            className="flex items-center gap-1 text-acc-text"
+            title="Anachronisms + lab hybrids — species that don't fit this ruleset's period, formation, or timeline at all"
+          >
             <span
               className="inline-block h-[7px] w-[7px] rounded-full"
               style={{ background: "var(--pa-acc-dot)" }}
@@ -425,7 +436,11 @@ export function ParkRail() {
         <div className="flex items-center gap-2">
           <span aria-hidden>📚</span> Species library
         </div>
-        <Link href="/states" className="flex items-center gap-2 text-muted hover:text-body">
+        <Link
+          href="/states"
+          className="flex items-center gap-2 text-muted hover:text-body"
+          title="A live gallery of every edge-case state a build has to handle — empty, conflicted, hybrid, marine, and more"
+        >
           <span aria-hidden>◳</span> §9 states reference
         </Link>
         <div className="pa-mono pt-1 text-[10px] text-faint">

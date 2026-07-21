@@ -10,6 +10,12 @@ import { Segmented } from "./ui/segmented";
 import { Menu, MenuItem } from "./ui/menu";
 import { SpeciesDetailModal } from "./species-detail";
 
+const ACCURACY_TITLE = {
+  ok: "Contemporary — this species actually lived in this era/place.",
+  hybrid: "Lab hybrid — genetically engineered, no fossil record to check against a timeline.",
+  warn: "Anachronism — game-valid, but this species didn't actually live in this era/place.",
+};
+
 function AccuracyChip({ candidate }: { candidate: Candidate }) {
   const { accuracy } = candidate;
   if (!accuracy.applies) return null;
@@ -21,6 +27,7 @@ function AccuracyChip({ candidate }: { candidate: Candidate }) {
   }[tone];
   return (
     <span
+      title={ACCURACY_TITLE[tone]}
       className={`flex flex-none items-center gap-1 rounded-[7px] border px-2 py-1 text-[11px] font-semibold whitespace-nowrap ${toneClass}`}
     >
       {accuracy.chip}
@@ -324,10 +331,16 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
       <div className="flex flex-wrap items-center gap-3 px-5 pt-3 pb-2">
         <span className="text-[14px] font-semibold text-ink2">Candidates</span>
         <div className="flex items-center gap-3 text-[11px] text-muted">
-          <span className="flex items-center gap-1.5">
+          <span
+            className="flex items-center gap-1.5"
+            title="Game — will they get along? Likes/dislikes decide Recommended/Allowed/Blocked (the dot, left)."
+          >
             <span className="h-2 w-2 rounded-full bg-dot-neutral" /> Game
           </span>
-          <span className="flex items-center gap-1.5">
+          <span
+            className="flex items-center gap-1.5"
+            title="Reality — did they ever actually coexist? Independent of Game status (the chip, right)."
+          >
             <span className="h-3 w-3 rounded-[3px] border border-acc-line" /> Reality
           </span>
         </div>

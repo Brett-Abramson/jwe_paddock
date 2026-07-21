@@ -149,6 +149,7 @@ export function RulesetControl({ enclosure }: { enclosure: Enclosure }) {
                     key={r.id}
                     type="button"
                     onClick={() => onPick(r, close)}
+                    title={r.note}
                     className={`flex w-full items-center gap-2 rounded-[6px] px-3 py-2 text-left text-[12px] ${
                       active ? "bg-inset text-ink" : "text-body hover:bg-inset"
                     }`}

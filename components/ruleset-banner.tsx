@@ -21,11 +21,20 @@ export function RulesetBanner() {
 
   return (
     <div className="flex items-center gap-4 border-b border-banner-line bg-banner px-5 py-3">
-      {/* brand mark */}
+      {/* brand mark + value prop — the only place a first-time visitor is told what this is */}
       <div className="flex items-center gap-2.5">
         <div className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-brand">
           <div className="h-[9px] w-[9px] rounded-[2px] bg-[color:var(--pa-brand-ink)]" />
         </div>
+        <div className="hidden flex-col leading-tight sm:flex">
+          <span className="text-[13px] font-bold text-ink">Paddock Atlas</span>
+          <span className="text-[10px] text-muted">Live-scored candidates, a derived build order</span>
+        </div>
+      </div>
+
+      <div className="hidden h-6 w-px bg-banner-line sm:block" aria-hidden />
+
+      <div className="flex items-center gap-2.5">
         <span className="pa-eyebrow text-rule-text">Park ruleset</span>
 
         <Menu
@@ -66,7 +75,9 @@ export function RulesetBanner() {
                     close();
                   }}
                 >
-                  <span className="flex-1">{r.label}</span>
+                  <span className="flex-1" title={r.note}>
+                    {r.label}
+                  </span>
                   {r.id === park.rulesetId && <span className="text-rule-text">✓</span>}
                 </MenuItem>
               ))}

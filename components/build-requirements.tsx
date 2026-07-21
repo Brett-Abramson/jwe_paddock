@@ -144,7 +144,16 @@ function FenceFeeders({ req }: { req: Reqs }) {
             {req.feeders.map((f) => (
               <div key={f.label} className="flex items-baseline gap-2">
                 <span className="h-1.5 w-1.5 flex-none rounded-full bg-cta" />
-                <span className="text-body">{f.label}</span>
+                <span
+                  className="text-body"
+                  title={
+                    f.label.includes("paleobotany")
+                      ? "Paleobotany = prehistoric plant matter — this feeder dispenses foliage, not meat."
+                      : undefined
+                  }
+                >
+                  {f.label}
+                </span>
                 <span className="pa-mono ml-auto truncate text-[10px] text-muted">{f.detail}</span>
               </div>
             ))}
