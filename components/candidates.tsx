@@ -173,18 +173,19 @@ export function CandidateRow({
         <span className="pa-mono w-[72px] flex-none text-right text-[12px] whitespace-nowrap text-muted">
           appeal {candidate.appeal}
         </span>
+        <span className="h-6 w-px flex-none bg-line" aria-hidden />
         <button
           type="button"
           onClick={toggleHatchery}
           title={staged ? "Remove from hatchery" : "Stage in hatchery"}
           aria-label={staged ? `Remove ${species.name} from hatchery` : `Stage ${species.name} in hatchery`}
-          className={`flex-none rounded-[7px] border px-2.5 py-1.5 text-[13px] leading-none ${
+          className={`flex flex-none items-center gap-1 whitespace-nowrap rounded-[7px] border px-2.5 py-1.5 text-[11px] font-semibold leading-none ${
             staged
               ? "border-ok-line bg-ok-tint text-ok-text"
               : "border-line text-muted hover:bg-inset hover:text-body"
           }`}
         >
-          🥚
+          <span aria-hidden>🥚</span> {staged ? "Staged" : "Stage"}
         </button>
         {status !== "blocked" && (
           <button
