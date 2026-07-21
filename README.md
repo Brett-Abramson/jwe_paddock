@@ -5,9 +5,11 @@ question players actually sit down with — _"I have a park to fill: what goes w
 what do I have to build to make it work?"_ — and produces a saveable **build order**.
 
 Built from the design handoff in `Paddock Atlas Design Specification-handoff.zip`
-(Claude Design). This repo implements **Build 1 — the functional workspace**: the park
-master-detail shell and the signature enclosure workspace, wired to a live scoring engine
-over the real **107-species paleo.gg dataset**, with local persistence and both skins.
+(Claude Design), then grown past it: parks and enclosures you can create, rename and
+delete; a Hatchery for staging species before they have a home; a live scoring engine over
+the real **107-species paleo.gg dataset**; and a Build Requirements plan modeled on JWE3's
+actual plant-painting mechanic. Client-only, `localStorage`-persisted, and deployable to
+Vercel with zero config.
 
 ## The three compatibility layers
 
@@ -23,7 +25,7 @@ collapses them:
 
 - **Next.js 16** (App Router) + **React 19** + **TypeScript**
 - **Tailwind CSS v4** (CSS-first tokens, `@theme inline`)
-- **JSON data** (illustrative sample dataset)
+- **JSON data** — real 107-species paleo.gg dataset, plus hand-curated plants/periods
 - Client-side state with **localStorage** persistence — no backend
 
 ## Run it
@@ -34,31 +36,45 @@ npm run build   # production build
 npm run lint    # eslint
 ```
 
-Open the dev URL. On first load the app seeds two parks (a JP-1993-canon "Isla Sombra"
-and a "Nublar Sandbox"); your edits persist to `localStorage`.
+Open the dev URL. On first load the app seeds two parks — **Isla Sombra** (Period ruleset:
+Late Cretaceous; five enclosures, including a solo T. rex and a marine lagoon) and
+**Nublar Sandbox** (no ruleset constraints); your edits persist to `localStorage`.
 
-## What's built (Build 1)
+## Deploy
 
-- **Master-detail park rail** — park switcher, enclosure list with per-enclosure **health
-  strips** (conflicts · fence tier · plant count · anachronisms), Hatchery + data-freshness
-  markers. Create/switch parks and enclosures.
-- **Enclosure workspace** — roster chips with an inline **variant picker** (flags non-canon
-  models), a quiet **Juvenile** segmented toggle, and territory/period chips.
+Zero-config on [Vercel](https://vercel.com/new): the app is fully static (no API routes, no
+env vars, no database) — import the repo and deploy. `engines.node` in `package.json` pins
+the runtime to what Next 16 requires (`>=20.9.0`).
+
+## What's built
+
+- **Master-detail park rail** — park switcher with inline rename, enclosure list with
+  inline rename and delete (with a confirm step), per-enclosure **health strips**
+  (conflicts · fence tier · plant count · anachronisms), and a data-freshness marker.
+  Create/switch parks and enclosures.
+- **Hatchery** — a per-park staging tray (🗂) for species that don't have an enclosure yet,
+  independent of any single enclosure's rules. Flags blocked / wrong-habitat / already-added
+  species and opens the same species detail modal as the roster.
+- **Enclosure workspace** — roster chips that open a **species detail modal** (env needs,
+  likes/dislikes, dig sites) on click, inline rename, a quiet **Juvenile** segmented toggle,
+  and territory/period chips.
 - **Live Candidates** — every species scored on both axes, nothing hidden: **Recommended /
   Allowed / Blocked** (left dot + word + plain-language reason) and a per-row **accuracy
-  chip** (right). Recommended sorts to top; Blocked sorts last with an attached **repair**
-  sub-row (`↳ Try X — why` + Swap-in). Rank-by (Appeal / Easiest / Canon fit / Family) and
-  Strict mode.
-- **Build Requirements** — derived live: **Accuracy report**, **Plant plan** (a set-cover
-  optimizer), **Fence tier** (max security + driver), **Feeders**, **Population & sex**
-  validation. Marine/aviary rosters swap plants+fence for lagoon/aviary infrastructure.
-  Juvenile mode rewrites the plan and **highlights changed rows**.
+  chip** (right). A search box plus Family/Diet/Terrain filter chips narrow the list without
+  ever hiding a candidate from the underlying scoring. Recommended sorts to top; Blocked
+  sorts last with an attached **repair** sub-row (`↳ Try X — why` + Swap-in). Rank-by
+  (Appeal / Easiest / Period-or-Formation fit / Family) and Strict mode.
+- **Build Requirements** — derived live: **Accuracy report**, **Plant plan** (a rate-based
+  set-cover over JWE3's real plant-painting brushes — one painted stroke can yield several
+  needs at once, e.g. Tempskya produces Ground Leaf *and* Tall Leaf simultaneously), **Fence
+  tier** (max security + driver), **Feeders**, **Population & sex** validation.
+  Marine/aviary rosters swap plants+fence for lagoon/aviary infrastructure. Juvenile mode
+  rewrites the plan and **highlights changed rows**.
 - **Two skins** — the Classic Jurassic Park **dark** production skin (default) and the
   **light** reference skin, behind a flash-free toggle (`data-theme` + head script).
 - **Data-drift handling** — a saved roster referencing a species no longer in the dataset
   is retained, flagged "not in dataset", and excluded from scoring.
-
-- **Ruleset inheritance → override → Custom** (Turn 3) — an enclosure shows `🔗 {ruleset}
+- **Ruleset inheritance → override → Custom** — an enclosure shows `🔗 {ruleset}
   · inherited from park`. Picking a clashing ruleset raises an amber warning **before
   anything is applied** ("…will convert {Park} to Custom so enclosures can differ") with
   Cancel / Convert to Custom. Once Custom, the park badge becomes a dashed
@@ -89,8 +105,9 @@ Two deviations from the original §9 list, both forced by the data:
 
 ### Deferred
 
-Drag-and-drop between enclosures (moving a species is currently a menu action), the Hatchery
-and Species library surfaces, and persisting a saved build order.
+Drag-and-drop between enclosures (moving a species is currently a menu action), a real
+Species library surface (the rail's 📚 entry is a placeholder), and persisting a saved
+build order (the button renders, not yet wired to state).
 
 ## Project structure
 
@@ -106,9 +123,11 @@ components/
   states/               conflict-banner, single-species, empty-park
   app-root.tsx          StoreProvider + app frame (hazard stripe, banner, rail, workspace)
   ruleset-banner.tsx    park ruleset dropdown + brand + theme toggle
-  park-rail.tsx         master-detail rail + health strips
-  enclosure-header.tsx  title/chips, roster chips, variant picker, juvenile toggle
-  candidates.tsx        dual-axis candidate rows + repairs + rank-by/strict
+  park-rail.tsx         master-detail rail + health strips + park/enclosure rename & delete
+  hatchery-panel.tsx    per-park staging tray, independent of enclosure rules
+  species-detail.tsx    species detail modal — env needs, likes/dislikes, dig sites
+  enclosure-header.tsx  title/chips, roster chips, inline rename, juvenile toggle
+  candidates.tsx        dual-axis candidate rows + search/filter + repairs + rank-by/strict
   build-requirements.tsx accuracy / plants / fence / feeders / population / marine
   workspace.tsx         composes header + candidates + requirements
   theme-toggle.tsx      skin switch (useSyncExternalStore over data-theme)
@@ -119,6 +138,7 @@ lib/
   seed.ts               initial parks/enclosures
   store.tsx             reducer + context + localStorage persistence
   selectors.ts          resolve state → engine inputs (+ data-drift split)
+  gallery-fixtures.ts   isolated fixtures for /states only
   engine/
     accuracy.ts         reality layer (canon / formation / contemporaneity)
     candidates.ts       game layer + reasons + repairs + rank-by
