@@ -3,9 +3,16 @@
 import { useMemo, useState } from "react";
 import { useApp } from "@/lib/store";
 import { SPECIES, MANIFEST } from "@/lib/data";
-import type { Enclosure } from "@/lib/types";
+import type { Enclosure, NeedKind } from "@/lib/types";
 import { effectiveRuleset, resolveRoster } from "@/lib/selectors";
-import { scoreCandidates, enclosurePeriod, type Candidate, type RankBy } from "@/lib/engine";
+import {
+  scoreCandidates,
+  enclosurePeriod,
+  GROUND_FEED,
+  TALL_FEED,
+  type Candidate,
+  type RankBy,
+} from "@/lib/engine";
 import { Segmented } from "./ui/segmented";
 import { Menu, MenuItem } from "./ui/menu";
 import { SpeciesDetailModal } from "./species-detail";
@@ -39,6 +46,18 @@ function statusWordClass(status: Candidate["status"]): string {
   if (status === "recommended") return "text-ok-text";
   if (status === "blocked") return "text-bad-text";
   return "text-muted";
+}
+
+/**
+ * "Diet" vs "Terrain" filters are a player-facing split, not the same axis as
+ * envNeeds' `kind` (which only decides which Build Requirements card a need
+ * renders on). Diet = what it eats: real feeders (Meat/Prey/Fish) plus the
+ * Ground/Tall paleobotany needs that drive one. Terrain = everything else —
+ * ground cover/dressing (Cover, Pasture, Arid, Barren, Wetland) and real dug
+ * terrain (Water, Open Water, Deep Water).
+ */
+function isDietNeed(need: string, kind: NeedKind): boolean {
+  return kind === "food" || GROUND_FEED.includes(need) || TALL_FEED.includes(need);
 }
 
 /** Single-select dropdown filter chip. Opens right-aligned so the option list
@@ -252,7 +271,7 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
   const { strict, rankBy } = state.settings;
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState<string | null>(null);
-  const [plantNeed, setPlantNeed] = useState<string | null>(null);
+  const [dietNeed, setDietNeed] = useState<string | null>(null);
   const [terrainNeed, setTerrainNeed] = useState<string | null>(null);
 
   const candidates = useMemo(() => {
@@ -269,15 +288,15 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
     () => Array.from(new Set(candidates.map((c) => c.species.family))).sort(),
     [candidates],
   );
-  // Real feeder-plant labels (e.g. "Ground Leaf", "Cover") and terrain needs
-  // (e.g. "Wetland") from envNeeds — the dataset has no grassland/forest
-  // terrain category, so those aren't offered here.
-  const plantNeeds = useMemo(
+  // "Diet" = what it eats (real feeders + the paleobotany needs that drive
+  // one). "Terrain" = everything else — ground dressing and dug terrain.
+  // See isDietNeed(); this is a player-facing split, not envNeeds' `kind`.
+  const dietNeeds = useMemo(
     () =>
       Array.from(
         new Set(
           candidates.flatMap((c) =>
-            c.species.envNeeds.filter((n) => n.kind === "plant").map((n) => n.need),
+            c.species.envNeeds.filter((n) => isDietNeed(n.need, n.kind)).map((n) => n.need),
           ),
         ),
       ).sort(),
@@ -288,7 +307,7 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
       Array.from(
         new Set(
           candidates.flatMap((c) =>
-            c.species.envNeeds.filter((n) => n.kind === "terrain").map((n) => n.need),
+            c.species.envNeeds.filter((n) => !isDietNeed(n.need, n.kind)).map((n) => n.need),
           ),
         ),
       ).sort(),
@@ -299,11 +318,14 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
     const q = query.trim().toLowerCase();
     return candidates.filter((c) => {
       if (family && c.species.family !== family) return false;
-      if (plantNeed && !c.species.envNeeds.some((n) => n.kind === "plant" && n.need === plantNeed))
+      if (
+        dietNeed &&
+        !c.species.envNeeds.some((n) => isDietNeed(n.need, n.kind) && n.need === dietNeed)
+      )
         return false;
       if (
         terrainNeed &&
-        !c.species.envNeeds.some((n) => n.kind === "terrain" && n.need === terrainNeed)
+        !c.species.envNeeds.some((n) => !isDietNeed(n.need, n.kind) && n.need === terrainNeed)
       )
         return false;
       if (!q) return true;
@@ -313,14 +335,14 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
         (c.species.genus?.toLowerCase().includes(q) ?? false)
       );
     });
-  }, [candidates, query, family, plantNeed, terrainNeed]);
+  }, [candidates, query, family, dietNeed, terrainNeed]);
 
   const rosterEmpty = members.length === 0;
   const fitLabel = ruleset.kind === "formation" ? "Formation fit" : "Period fit";
   const filterDescriptors = [
     query.trim() && `“${query.trim()}”`,
     family,
-    plantNeed && `eats ${plantNeed}`,
+    dietNeed && `eats ${dietNeed}`,
     terrainNeed && `prefers ${terrainNeed}`,
   ].filter((d): d is string => Boolean(d));
   const filtering = filterDescriptors.length > 0;
@@ -402,9 +424,9 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
         <FilterMenu
           label="Diet"
           allLabel="Any diet"
-          value={plantNeed}
-          options={plantNeeds}
-          onChange={setPlantNeed}
+          value={dietNeed}
+          options={dietNeeds}
+          onChange={setDietNeed}
         />
         <FilterMenu
           label="Terrain"

@@ -80,9 +80,9 @@ export interface BuildRequirements {
   juvenileNotes: string[];
 }
 
-/** Feeding needs (Cover/Pasture are habitat foliage, not feeders). */
-const GROUND_FEED = ["Ground Leaf", "Ground Fiber", "Ground Fruit", "Ground Nut"];
-const TALL_FEED = ["Tall Leaf", "Tall Fruit", "Tall Nut"];
+/** Feeding needs (Cover/Pasture/Arid/Barren/Wetland are habitat dressing, not feeders). */
+export const GROUND_FEED = ["Ground Leaf", "Ground Fiber", "Ground Fruit", "Ground Nut"];
+export const TALL_FEED = ["Tall Leaf", "Tall Fruit", "Tall Nut"];
 
 // ---- population helpers ----------------------------------------------------
 
