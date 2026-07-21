@@ -13,14 +13,15 @@ import { SpeciesDetailModal } from "./species-detail";
 function AccuracyChip({ candidate }: { candidate: Candidate }) {
   const { accuracy } = candidate;
   if (!accuracy.applies) return null;
-  const ok = accuracy.tone === "ok";
+  const tone = accuracy.tone === "ok" ? "ok" : accuracy.hybrid ? "hybrid" : "warn";
+  const toneClass = {
+    ok: "border-ok-line bg-ok-tint text-ok-text",
+    hybrid: "border-hyb-line bg-hyb-tint text-hyb-text",
+    warn: "border-acc-line bg-acc-tint text-acc-text",
+  }[tone];
   return (
     <span
-      className={`flex flex-none items-center gap-1 rounded-[7px] border px-2 py-1 text-[11px] font-semibold whitespace-nowrap ${
-        ok
-          ? "border-ok-line bg-ok-tint text-ok-text"
-          : "border-acc-line bg-acc-tint text-acc-text"
-      }`}
+      className={`flex flex-none items-center gap-1 rounded-[7px] border px-2 py-1 text-[11px] font-semibold whitespace-nowrap ${toneClass}`}
     >
       {accuracy.chip}
     </span>
@@ -100,7 +101,8 @@ export function CandidateRow({
 }) {
   const { state, dispatch } = useApp();
   const { species, status, accuracy } = candidate;
-  const anachronism = accuracy.applies && accuracy.tone === "warn";
+  const hybrid = accuracy.applies && !!accuracy.hybrid;
+  const anachronism = accuracy.applies && accuracy.tone === "warn" && !hybrid;
   const [detailOpen, setDetailOpen] = useState(false);
 
   const parkId = state.enclosures[enclosureId]?.parkId;
@@ -118,11 +120,13 @@ export function CandidateRow({
   const wrapper =
     status === "blocked"
       ? "border-bad-line"
-      : anachronism
-        ? "border-acc-line bg-acc-tint"
-        : status === "recommended"
-          ? "border-ok-line bg-ok-tint"
-          : "border-line bg-card";
+      : hybrid
+        ? "border-hyb-line bg-hyb-tint"
+        : anachronism
+          ? "border-acc-line bg-acc-tint"
+          : status === "recommended"
+            ? "border-ok-line bg-ok-tint"
+            : "border-line bg-card";
 
   const dotColor =
     status === "recommended"
@@ -163,7 +167,13 @@ export function CandidateRow({
           </div>
           <span
             className={`text-[12px] ${
-              anachronism ? "text-acc-text" : status === "blocked" ? "text-bad-text" : "text-body"
+              hybrid
+                ? "text-hyb-text"
+                : anachronism
+                  ? "text-acc-text"
+                  : status === "blocked"
+                    ? "text-bad-text"
+                    : "text-body"
             }`}
           >
             {candidate.reason}

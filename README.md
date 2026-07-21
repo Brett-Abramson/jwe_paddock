@@ -183,7 +183,7 @@ files.** The ingest prints a data-quality report and applies these rules:
   dangerous error; a missed "like" only costs a nudge.
 - Dig sites normalize to base formations ("Hell Creek Formation A" → "Hell Creek Formation").
 - The 9 `Holocene` entries are **lab hybrids** (Indominus rex, Indoraptor, Scorpios rex…)
-  with no fossil record, so they're flagged `isHybrid` and get a "⚠ Hybrid" chip instead of
+  with no fossil record, so they're flagged `isHybrid` and get a "🧬 Hybrid" chip instead of
   a meaningless "~83 my out of place".
 
 `data/plants.json` is the one **hand-curated** file — paleo.gg publishes no flora database, so

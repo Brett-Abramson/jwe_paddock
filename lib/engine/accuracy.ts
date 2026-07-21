@@ -18,7 +18,7 @@ export interface Accuracy {
   /** false under Sandbox — no chip, no report */
   applies: boolean;
   tone: AccuracyTone;
-  /** short chip label, e.g. "✓ Contemporary" / "⚠ Anachronism" */
+  /** short chip label, e.g. "✓ Contemporary" / "⚠ Anachronism" / "🧬 Hybrid" */
   chip: string;
   /** shares the reference period */
   contemporary: boolean;
@@ -78,7 +78,7 @@ export function evalAccuracy(
     return {
       applies: true,
       tone: "warn",
-      chip: "⚠ Hybrid",
+      chip: "🧬 Hybrid",
       contemporary: false,
       sharesFormation: false,
       hybrid: true,

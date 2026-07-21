@@ -24,7 +24,8 @@ export interface RosterMember {
 export type Tone = "ok" | "warn" | "bad";
 
 export interface ReportLine {
-  tone: "ok" | "warn";
+  /** "hybrid" is a distinct case from "warn": synthetic/no fossil record, not out-of-place-in-time */
+  tone: "ok" | "warn" | "hybrid";
   text: string;
 }
 export interface AccuracyReport {
@@ -207,7 +208,7 @@ function buildAccuracyReport(members: RosterMember[], ruleset: Ruleset): Accurac
   }
   if (hybrids.length > 0) {
     lines.push({
-      tone: "warn",
+      tone: "hybrid",
       text: `${hybrids.length} lab hybrid${hybrids.length > 1 ? "s" : ""} — no fossil record (${hybrids
         .map((s) => s.name)
         .join(", ")})`,

@@ -24,10 +24,12 @@ function AccuracyCard({ req }: { req: Reqs }) {
         {req.accuracy.lines.map((l, i) => (
           <div
             key={i}
-            className={`flex items-start gap-2 ${l.tone === "ok" ? "text-body" : "text-acc-text"}`}
+            className={`flex items-start gap-2 ${
+              l.tone === "ok" ? "text-body" : l.tone === "hybrid" ? "text-hyb-text" : "text-acc-text"
+            }`}
           >
             <span className={l.tone === "ok" ? "text-ok-dot" : ""}>
-              {l.tone === "ok" ? "✓" : "⚠"}
+              {l.tone === "ok" ? "✓" : l.tone === "hybrid" ? "🧬" : "⚠"}
             </span>
             <span>{l.text}</span>
           </div>

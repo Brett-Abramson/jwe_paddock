@@ -26,7 +26,7 @@ together, or the cast in `lib/data.ts` will lie to you at runtime.
 - **Dislike wins** when a species is both liked and disliked (24 such clashes in the source). A
   missed conflict is the dangerous error; a missed "like" only costs a nudge.
 - Dig sites normalize to base formations: `"Hell Creek Formation A"` → `"Hell Creek Formation"`.
-- The 9 `Holocene` entries are lab hybrids → `isHybrid: true`. They get a "⚠ Hybrid" chip, never
+- The 9 `Holocene` entries are lab hybrids → `isHybrid: true`. They get a "🧬 Hybrid" chip, never
   an "N my out of place" number, because they have no fossil record.
 - One dirty continent value (`jwe3-digsite:india`) is mapped back to `Asia`.
 
