@@ -264,6 +264,52 @@ export function CandidateRow({
   );
 }
 
+/** Trust affordance: a plain-language answer to "why is this Recommended/Blocked?" */
+function ScoringExplainer() {
+  return (
+    <Menu
+      align="left"
+      widthClass="min-w-[320px]"
+      trigger={() => (
+        <span
+          className="pa-mono flex h-4 w-4 items-center justify-center rounded-full border border-line text-[10px] text-muted hover:border-line2 hover:text-body"
+          title="How scoring works"
+        >
+          i
+        </span>
+      )}
+    >
+      {() => (
+        <div className="flex flex-col gap-2.5 px-3 py-2.5 text-[12px] text-body">
+          <div className="pa-eyebrow">How Game status is decided</div>
+          <p>
+            <b className="text-ok-text">Recommended</b> — someone in the roster likes this
+            species, or it likes someone already there.
+          </p>
+          <p>
+            <b className="text-ink2">Allowed</b> — no like, no dislike either direction. Neutral,
+            not a repair.
+          </p>
+          <p>
+            <b className="text-bad-text">Blocked</b> — a dislike exists somewhere in the roster.
+            Every blocked row gets a repair: same family first, then a liked species, then the
+            closest appeal.
+          </p>
+          <div className="mt-1 border-t border-line2 pt-2">
+            <b className="text-ink2">Appeal</b>{" "}
+            is the species&apos; own in-game appeal stat — the default sort. It never affects
+            Game status, only ranking.
+          </div>
+          <div className="text-muted">
+            The accuracy chip (right) is a separate axis — a species can be Recommended and still
+            flagged Anachronism or Hybrid.
+          </div>
+        </div>
+      )}
+    </Menu>
+  );
+}
+
 export function Candidates({ enclosure }: { enclosure: Enclosure }) {
   const { state, dispatch } = useApp();
   const { members } = resolveRoster(enclosure);
@@ -273,6 +319,7 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
   const [family, setFamily] = useState<string | null>(null);
   const [dietNeed, setDietNeed] = useState<string | null>(null);
   const [terrainNeed, setTerrainNeed] = useState<string | null>(null);
+  const [showBlocked, setShowBlocked] = useState(false);
 
   const candidates = useMemo(() => {
     const period = enclosurePeriod(members.map((m) => m.species));
@@ -347,11 +394,21 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
   ].filter((d): d is string => Boolean(d));
   const filtering = filterDescriptors.length > 0;
 
+  // Progressive disclosure: blocked candidates are still scored and counted
+  // (never dropped — see lib/AGENTS.md's "nothing is hidden" invariant),
+  // just collapsed by default so a big roster doesn't bury the picks that
+  // matter. Actively filtering/searching reveals everything, so search still
+  // finds a blocked species without an extra click.
+  const openCandidates = filtered.filter((c) => c.status !== "blocked");
+  const blockedCandidates = filtered.filter((c) => c.status === "blocked");
+  const revealBlocked = showBlocked || filtering;
+
   return (
     <section className="flex min-h-0 flex-col overflow-hidden border-r border-line2">
       {/* controls */}
       <div className="flex flex-wrap items-center gap-3 px-5 pt-3 pb-2">
         <span className="text-[14px] font-semibold text-ink2">Candidates</span>
+        <ScoringExplainer />
         <div className="flex items-center gap-3 text-[11px] text-muted">
           <span
             className="flex items-center gap-1.5"
@@ -456,9 +513,26 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
       )}
 
       <div className="pa-scroll flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 pb-4">
-        {filtered.map((c) => (
+        {openCandidates.map((c) => (
           <CandidateRow key={c.species.id} candidate={c} enclosureId={enclosure.id} />
         ))}
+        {blockedCandidates.length > 0 && (
+          <>
+            <button
+              type="button"
+              onClick={() => setShowBlocked((v) => !v)}
+              className="flex items-center gap-2 rounded-[8px] border border-dashed border-dash px-3 py-2 text-[12px] font-medium text-muted hover:border-line2 hover:text-body"
+            >
+              <span aria-hidden>{revealBlocked ? "▴" : "▾"}</span>
+              {revealBlocked ? "Hide" : "Show"} {blockedCandidates.length} blocked
+              {!revealBlocked && " — each has a repair"}
+            </button>
+            {revealBlocked &&
+              blockedCandidates.map((c) => (
+                <CandidateRow key={c.species.id} candidate={c} enclosureId={enclosure.id} />
+              ))}
+          </>
+        )}
         {candidates.length === 0 && (
           <div className="px-2 py-6 text-center text-[12px] text-muted">
             No compatible candidates for this habitat.

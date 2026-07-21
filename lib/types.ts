@@ -147,3 +147,12 @@ export interface DataManifest {
   source: string;
   speciesCount: number;
 }
+
+/** A single enclosure's build, portable enough to round-trip through a URL. */
+export interface SharedBuild {
+  name: string;
+  rulesetId: string;
+  juvenileMode: JuvenileMode;
+  territories: number;
+  roster: RosterEntry[];
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useApp } from "@/lib/store";
 import { PLANTS, formatArea } from "@/lib/data";
 import type { Enclosure } from "@/lib/types";
@@ -10,6 +10,7 @@ import {
   type BuildRequirements as Reqs,
   type PopulationRow,
 } from "@/lib/engine";
+import { encodeBuild } from "@/lib/share";
 import { SingleSpeciesNote } from "./states/single-species";
 
 function AccuracyCard({ req }: { req: Reqs }) {
@@ -233,6 +234,47 @@ export function PopulationCard({ rows }: { rows: PopulationRow[] }) {
   );
 }
 
+/**
+ * Everything here already autosaves to localStorage — there's nothing extra
+ * to "save". What's actually missing is a portable copy: this encodes the
+ * roster + ruleset + juvenile mode into a URL (no backend to store it in)
+ * and copies it, so the build can be pasted into Discord/Reddit/wherever and
+ * opened by anyone, read-only, with a one-click "Import into my parks".
+ */
+function ShareButton({ enclosure, rulesetId }: { enclosure: Enclosure; rulesetId: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const share = async () => {
+    const url = `${window.location.origin}/share?b=${encodeBuild({
+      name: enclosure.name,
+      rulesetId,
+      juvenileMode: enclosure.juvenileMode,
+      territories: enclosure.territories,
+      roster: enclosure.roster,
+    })}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      window.prompt("Copy this link:", url);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={share}
+      title="Copy a link to this exact build — roster, ruleset, juvenile mode — for anyone to open and import"
+      className={`mt-1 shrink-0 rounded-[9px] py-2.5 text-[13px] font-bold ${
+        copied ? "bg-ok-tint text-ok-text" : "bg-cta text-cta-ink"
+      }`}
+    >
+      {copied ? "Link copied ✓" : "Share build"}
+    </button>
+  );
+}
+
 export function BuildRequirements({ enclosure }: { enclosure: Enclosure }) {
   const { state } = useApp();
   const { members } = resolveRoster(enclosure);
@@ -296,12 +338,7 @@ export function BuildRequirements({ enclosure }: { enclosure: Enclosure }) {
               </div>
             )}
 
-            <button
-              type="button"
-              className="mt-1 shrink-0 rounded-[9px] bg-cta py-2.5 text-[13px] font-bold text-cta-ink"
-            >
-              Save build order
-            </button>
+            <ShareButton enclosure={enclosure} rulesetId={ruleset.id} />
           </>
         )}
       </div>

@@ -16,7 +16,7 @@ import {
   type Dispatch,
   type ReactNode,
 } from "react";
-import type { Enclosure, Park, RosterEntry, JuvenileMode } from "./types";
+import type { Enclosure, Park, RosterEntry, JuvenileMode, SharedBuild } from "./types";
 import type { RankBy } from "./engine";
 import { getSpecies } from "./data";
 import {
@@ -64,7 +64,8 @@ export type Action =
   | { type: "NEW_PARK" }
   | { type: "RENAME_PARK"; parkId: string; name: string }
   | { type: "ADD_TO_HATCHERY"; parkId: string; speciesId: string }
-  | { type: "REMOVE_FROM_HATCHERY"; parkId: string; speciesId: string };
+  | { type: "REMOVE_FROM_HATCHERY"; parkId: string; speciesId: string }
+  | { type: "IMPORT_BUILD"; build: SharedBuild };
 
 function seedState(): AppState {
   return {
@@ -313,6 +314,33 @@ function reducer(state: AppState, action: Action): AppState {
             : p,
         ),
       };
+
+    case "IMPORT_BUILD": {
+      const parkId = uid("park");
+      const enclosureId = uid("enc");
+      const park: Park = {
+        id: parkId,
+        name: `${action.build.name} (imported)`,
+        rulesetId: action.build.rulesetId,
+        enclosureIds: [enclosureId],
+        hatchery: [],
+      };
+      const enclosure: Enclosure = {
+        id: enclosureId,
+        name: action.build.name,
+        parkId,
+        roster: action.build.roster,
+        juvenileMode: action.build.juvenileMode,
+        territories: action.build.territories,
+      };
+      return {
+        ...state,
+        parks: [...state.parks, park],
+        enclosures: { ...state.enclosures, [enclosureId]: enclosure },
+        activeParkId: parkId,
+        activeEnclosureId: enclosureId,
+      };
+    }
 
     default:
       return state;
