@@ -55,9 +55,6 @@ export function EnclosureHeader({ enclosure }: { enclosure: Enclosure }) {
             {enclosure.name}
           </button>
         )}
-        <span className="pa-mono rounded-[5px] border border-line px-1.5 py-0.5 text-[10px] text-muted">
-          {enclosure.territories} {enclosure.territories === 1 ? "territory" : "territories"}
-        </span>
         {period && (
           <span className="pa-mono rounded-[5px] border border-rule-line px-1.5 py-0.5 text-[10px] text-rule-text">
             Period · {period}
