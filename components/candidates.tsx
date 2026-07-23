@@ -296,9 +296,20 @@ function ScoringExplainer() {
             closest appeal.
           </p>
           <div className="mt-1 border-t border-line2 pt-2">
-            <b className="text-ink2">Appeal</b>{" "}
-            is the species&apos; own in-game appeal stat — the default sort. It never affects
-            Game status, only ranking.
+            <div className="pa-eyebrow">Sort options</div>
+            <div className="text-muted">
+              <b className="text-ink2">Appeal</b> — species&apos; in-game appeal stat (default).
+            </div>
+            <div className="text-muted">
+              <b className="text-ink2">Easiest</b> — species with plant needs you&apos;ve already painted
+              (smallest new requirements).
+            </div>
+            <div className="text-muted">
+              <b className="text-ink2">Period fit</b> — species contemporary to your roster.
+            </div>
+            <div className="text-muted">
+              <b className="text-ink2">Family</b> — species already in your roster (grouped by family).
+            </div>
           </div>
           <div className="text-muted">
             The accuracy chip (right) is a separate axis — a species can be Recommended and still
@@ -407,22 +418,8 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
     <section className="flex min-h-0 flex-1 flex-col overflow-hidden">
       {/* controls */}
       <div className="flex flex-wrap items-center gap-3 px-5 pt-3 pb-2">
-        <span className="text-[14px] font-semibold text-ink2">Candidates</span>
+        <span className="text-[18px] font-semibold text-ink">Candidates</span>
         <ScoringExplainer />
-        <div className="flex items-center gap-3 text-[11px] text-muted">
-          <span
-            className="flex items-center gap-1.5"
-            title="Game — will they get along? Likes/dislikes decide Recommended/Allowed/Blocked (the dot, left)."
-          >
-            <span className="h-2 w-2 rounded-full bg-dot-neutral" /> Game
-          </span>
-          <span
-            className="flex items-center gap-1.5"
-            title="Reality — did they ever actually coexist? Independent of Game status (the chip, right)."
-          >
-            <span className="h-3 w-3 rounded-[3px] border border-acc-line" /> Reality
-          </span>
-        </div>
         <div className="ml-auto flex items-center gap-2">
           <Segmented<RankBy>
             size="sm"
