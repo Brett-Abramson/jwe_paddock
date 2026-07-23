@@ -65,7 +65,7 @@ function ResidentRow({
           widthClass="min-w-[230px]"
           trigger={() => (
             <span className="flex items-center gap-2 rounded-[6px] px-1.5 py-1 hover:bg-inset">
-              <span className="pa-mono text-[11px] text-muted">{sexLabel(member)}</span>
+              <span className="pa-mono text-[11px] text-body">{sexLabel(member)}</span>
               {member.juveniles > 0 && (
                 <span className="pa-mono rounded-[5px] bg-juv-header px-1.5 text-[10px] text-juv-text">
                   +{member.juveniles} juv
