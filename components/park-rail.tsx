@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
 import { useApp } from "@/lib/store";
 import { MANIFEST, PLANTS } from "@/lib/data";
 import {
@@ -425,25 +424,24 @@ export function ParkRail() {
       </div>
 
       {/* footer */}
-      <div className="flex flex-col gap-2 border-t border-line2 px-4 py-3 text-[12px] text-muted">
+      <div className="flex flex-col gap-1.5 border-t border-line2 px-3 py-3 text-[13px]">
         <button
           type="button"
           onClick={() => setHatcheryOpen(true)}
-          className="flex items-center gap-2 text-left hover:text-body"
+          className="flex items-center gap-2 rounded-[8px] px-2 py-1.5 text-left font-semibold text-ink2 hover:bg-inset hover:text-ink"
         >
-          <span aria-hidden>🗂</span> Hatchery — {park.hatchery.length} staged
+          <span aria-hidden className="text-[15px]">🗂</span> Hatchery — {park.hatchery.length} staged
         </button>
-        <div className="flex items-center gap-2">
-          <span aria-hidden>📚</span> Species library
-        </div>
-        <Link
-          href="/states"
-          className="flex items-center gap-2 text-muted hover:text-body"
-          title="A live gallery of every edge-case state a build has to handle — empty, conflicted, hybrid, marine, and more"
+        <div
+          className="flex items-center gap-2 rounded-[8px] px-2 py-1.5 font-semibold text-ink2"
+          title="Browse every species outside an enclosure — not built yet"
         >
-          <span aria-hidden>◳</span> §9 states reference
-        </Link>
-        <div className="pa-mono pt-1 text-[10px] text-faint">
+          <span aria-hidden className="text-[15px]">📚</span> Species library
+          <span className="pa-mono ml-auto rounded-full border border-line2 bg-inset px-1.5 py-0.5 text-[9px] font-normal uppercase tracking-wide text-faint">
+            Soon
+          </span>
+        </div>
+        <div className="pa-mono px-2 pt-1 text-[10px] text-faint">
           data as of · {MANIFEST.asOf} · {MANIFEST.speciesCount} species
         </div>
       </div>
