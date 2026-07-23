@@ -43,14 +43,7 @@
 
   /* ruleset & brand accents — hardcoded to dark theme colors for consistency across themes */
   --pa-rule-fill: oklch(0.74 0.13 72);
-  --pa-rule-ink: oklch(0.18 0.02 72);
-  --pa-rule-text: oklch(0.78 0.1 72);
-  --pa-rule-tint: oklch(0.24 0.05 72);
-  --pa-rule-line: oklch(0.42 0.07 72);
-
-  /* ruleset accent (amber-gold in dark) */
-  --pa-rule-fill: oklch(0.74 0.13 72);
-  --pa-rule-ink: oklch(0.18 0.02 72);
+  --pa-rule-ink: oklch(0.14 0.01 72);
   --pa-rule-text: oklch(0.78 0.1 72);
   --pa-rule-tint: oklch(0.24 0.05 72);
   --pa-rule-line: oklch(0.42 0.07 72);

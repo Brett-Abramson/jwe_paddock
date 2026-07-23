@@ -83,7 +83,7 @@ export function RulesetBanner() {
         </Menu>
       </div>
 
-      <span className="hidden text-[12px] text-rule-text/80 md:inline">{note}</span>
+      <span className="hidden text-[12px] text-body md:inline">{note}</span>
 
       <div className="ml-auto flex items-center gap-3">
         <span className="pa-mono text-[10px] text-muted">
