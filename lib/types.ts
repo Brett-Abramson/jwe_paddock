@@ -9,7 +9,6 @@
 // ============================================================================
 
 export type Lifestyle = "land" | "marine" | "aviary";
-export type JuvenileMode = "adults" | "pair" | "juveniles";
 
 /** How a need is satisfied: by flora, by a feeder, or by terrain/water. */
 export type NeedKind = "plant" | "food" | "terrain";
@@ -129,7 +128,6 @@ export interface Enclosure {
   roster: RosterEntry[];
   /** Effective ruleset = rulesetOverrideId ?? park.rulesetId. */
   rulesetOverrideId?: string;
-  juvenileMode: JuvenileMode;
   territories: number;
 }
 
@@ -152,7 +150,6 @@ export interface DataManifest {
 export interface SharedBuild {
   name: string;
   rulesetId: string;
-  juvenileMode: JuvenileMode;
   territories: number;
   roster: RosterEntry[];
 }

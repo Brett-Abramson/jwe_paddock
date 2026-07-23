@@ -9,7 +9,7 @@
 // numbers — the source has no per-lifestage need rows.
 // ============================================================================
 
-import type { Species, Ruleset, Plant, JuvenileMode, Lifestyle } from "../types";
+import type { Species, Ruleset, Plant, Lifestyle } from "../types";
 import { enclosurePeriod, sharedFormations } from "./accuracy";
 import { optimizePlants, type NeedAmount, type PlantPick, type PlantPlan } from "./plants";
 
@@ -75,9 +75,7 @@ export interface BuildRequirements {
   feeders: FeederRow[];
   population: PopulationRow[];
   marine?: MarineReq;
-  juvenileActive: boolean;
   totalAnimals: number;
-  juvenileNotes: string[];
 }
 
 /** Feeding needs (Cover/Pasture/Arid/Barren/Wetland are habitat dressing, not feeders). */
@@ -86,11 +84,9 @@ export const TALL_FEED = ["Tall Leaf", "Tall Fruit", "Tall Nut"];
 
 // ---- population helpers ----------------------------------------------------
 
-/** Planned animals for a member under the current mode. */
-function population(m: RosterMember, mode: JuvenileMode): number {
-  if (mode === "juveniles") return m.count + Math.max(1, m.juveniles);
-  if (mode === "pair") return Math.max(2, m.count);
-  return m.count;
+/** Total animals for a member (adults + juveniles). */
+function population(m: RosterMember): number {
+  return m.count + m.juveniles;
 }
 
 /** Area scales with population by the species' own growth rate. */
@@ -101,12 +97,11 @@ function scaledArea(base: number, growthPct: number, pop: number): number {
 /** Aggregate the roster's needs of one kind into total m² per need. */
 function aggregateNeeds(
   members: RosterMember[],
-  mode: JuvenileMode,
   kind: "plant" | "terrain",
 ): NeedAmount[] {
   const totals = new Map<string, number>();
   for (const m of members) {
-    const pop = population(m, mode);
+    const pop = population(m);
     for (const n of m.species.envNeeds) {
       if (n.kind !== kind) continue;
       const area = scaledArea(n.area, m.species.areaNeedGrowth, pop);
@@ -171,7 +166,7 @@ export function biomeForNeed(need: string): Biome | null {
 
 /**
  * Terrain space plan — the share of enclosure ground each biome must cover to
- * suit every resident, aggregated at the current population. Folds in the
+ * suit every resident, aggregated with all animals (adults + juveniles). Folds in the
  * Plant plan (this is meant to help divvy up the enclosure, so painted flora
  * has to count as ground too): each plant pick's real `paintArea` — not the
  * raw need totals — since one painted patch can satisfy several needs at
@@ -180,7 +175,6 @@ export function biomeForNeed(need: string): Biome | null {
  */
 export function terrainSpacePlan(
   members: RosterMember[],
-  mode: JuvenileMode,
   plants: Plant[],
 ): SpacePlanRow[] {
   const merged = new Map<string, { biome: Biome; area: number }>();
@@ -191,7 +185,7 @@ export function terrainSpacePlan(
     else merged.set(need, { biome, area });
   };
 
-  const plantPlan = optimizePlants(aggregateNeeds(members, mode, "plant"), plants);
+  const plantPlan = optimizePlants(aggregateNeeds(members, "plant"), plants);
   for (const pick of plantPlan.picks) {
     // one physical patch can yield >1 need (e.g. a Swamp pick also gives some
     // Cover) — colour it by whichever need it supplies the most of, so the
@@ -199,7 +193,7 @@ export function terrainSpacePlan(
     const dominant = [...pick.supplies].sort((a, b) => b.area - a.area)[0];
     add(pick.supplies.map((s) => s.need).join(" + "), biomeForNeed(dominant.need), pick.paintArea);
   }
-  for (const n of aggregateNeeds(members, mode, "terrain")) {
+  for (const n of aggregateNeeds(members, "terrain")) {
     add(n.need, biomeForNeed(n.need), n.area);
   }
 
@@ -321,7 +315,7 @@ function buildAccuracyReport(members: RosterMember[], ruleset: Ruleset): Accurac
   };
 }
 
-function buildPopulation(members: RosterMember[], mode: JuvenileMode): PopulationRow[] {
+function buildPopulation(members: RosterMember[]): PopulationRow[] {
   return members.map((m) => {
     const s = m.species;
     const parts: string[] = [];
@@ -329,15 +323,17 @@ function buildPopulation(members: RosterMember[], mode: JuvenileMode): Populatio
     if (s.socialGroupMax != null) parts.push(`group ≤${s.socialGroupMax}`);
     if (s.maxFemales != null) parts.push(`max ${s.maxFemales} ♀`);
     if (s.maxMales != null) parts.push(`max ${s.maxMales} ♂`);
+    if (s.maxJuveniles != null) parts.push(`max ${s.maxJuveniles} juveniles`);
     const requirement = parts.length ? parts.join(", ") : "solo ok";
 
     let tone: Tone = "ok";
     let detail: string | undefined;
-    let countLabel = `${m.count} ✓`;
+    const total = m.count + m.juveniles;
+    let countLabel = `${total} ✓`;
 
     if (m.count < s.minPopulation) {
       tone = "bad";
-      detail = `Planned ${m.count} · needs at least ${s.minPopulation}.`;
+      detail = `Planned ${m.count} adults · needs at least ${s.minPopulation}.`;
       countLabel = `${m.count}`;
     } else if (s.maxFemales != null && m.females > s.maxFemales) {
       tone = "bad";
@@ -347,12 +343,13 @@ function buildPopulation(members: RosterMember[], mode: JuvenileMode): Populatio
       tone = "bad";
       detail = `Planned ${m.males} ♂ · reduce to ${s.maxMales} ♂.`;
       countLabel = `${m.males} ♂`;
-    } else if (s.socialGroupMax != null && m.count > s.socialGroupMax) {
+    } else if (s.maxJuveniles != null && m.juveniles > s.maxJuveniles) {
+      tone = "bad";
+      detail = `Planned ${m.juveniles} juveniles · max is ${s.maxJuveniles}.`;
+      countLabel = `${m.juveniles} juveniles`;
+    } else if (s.socialGroupMax != null && total > s.socialGroupMax) {
       tone = "warn";
-      detail = `Social group tops out at ${s.socialGroupMax}; ${m.count} may stress the herd.`;
-    } else if (mode !== "adults" && (m.females < 1 || m.males < 1)) {
-      tone = "warn";
-      detail = "Needs ≥1 male and ≥1 female to breed.";
+      detail = `Social group tops out at ${s.socialGroupMax}; ${total} may stress the herd.`;
     }
     return { speciesId: s.id, name: s.name, tone, requirement, detail, countLabel };
   });
@@ -382,7 +379,7 @@ function buildFeeders(members: RosterMember[]): FeederRow[] {
 function buildMarine(members: RosterMember[], lifestyle: "marine" | "aviary"): MarineReq {
   const anchor = [...members].sort((a, b) => b.species.appeal - a.species.appeal)[0];
   const totalArea = members.reduce((sum, m) => {
-    const pop = population(m, "adults");
+    const pop = population(m);
     return (
       sum +
       m.species.envNeeds
@@ -420,61 +417,31 @@ export function buildRequirements(
   members: RosterMember[],
   ruleset: Ruleset,
   plants: Plant[],
-  juvenileMode: JuvenileMode,
 ): BuildRequirements {
   const lifestyle = members.length ? rosterLifestyle(members) : "land";
-  const juvenileActive = juvenileMode === "juveniles";
   const accuracy = buildAccuracyReport(members, ruleset);
-  const population_ = buildPopulation(members, juvenileMode);
-  const juvenileNotes: string[] = [];
-  const totalAnimals = members.reduce((n, m) => n + population(m, juvenileMode), 0);
+  const population_ = buildPopulation(members);
+  const totalAnimals = members.reduce((n, m) => n + population(m), 0);
 
-  // needs under the current mode, and under plain adults for the diff
-  const planNeeds = aggregateNeeds(members, juvenileMode, "plant");
-  const baseNeeds = aggregateNeeds(members, "adults", "plant");
-  const baseByNeed = new Map(baseNeeds.map((n) => [n.need, n.area]));
+  const plantNeeds = aggregateNeeds(members, "plant");
+  const terrainNeeds = aggregateNeeds(members, "terrain");
 
   let plantPlan: PlantPlan | undefined;
   let plantRows: PlantRow[] = [];
   let terrain: TerrainRow[] = [];
 
   if (lifestyle === "land") {
-    plantPlan = optimizePlants(planNeeds, plants);
+    plantPlan = optimizePlants(plantNeeds, plants);
     plantRows = plantPlan.picks.map((p) => ({
       ...p,
-      changed:
-        juvenileActive &&
-        p.supplies.some((s) => {
-          const now = planNeeds.find((n) => n.need === s.need)?.area ?? 0;
-          return Math.round(now) !== Math.round(baseByNeed.get(s.need) ?? 0);
-        }),
+      changed: false,
     }));
 
-    const baseTerrain = new Map(
-      aggregateNeeds(members, "adults", "terrain").map((n) => [n.need, n.area]),
-    );
-    terrain = aggregateNeeds(members, juvenileMode, "terrain").map((n) => ({
+    terrain = terrainNeeds.map((n) => ({
       need: n.need,
       area: n.area,
-      changed: juvenileActive && Math.round(n.area) !== Math.round(baseTerrain.get(n.need) ?? 0),
+      changed: false,
     }));
-
-    if (juvenileActive) {
-      const grew = plantRows.some((r) => r.changed) || terrain.some((t) => t.changed);
-      if (grew) {
-        juvenileNotes.push(
-          "Juveniles count toward the population, so every area requirement grows — plan the space before you breed.",
-        );
-      }
-      const tall = members.filter((m) =>
-        m.species.envNeeds.some((n) => TALL_FEED.includes(n.need)),
-      );
-      if (tall.length > 0) {
-        juvenileNotes.push(
-          `${tall.map((m) => m.species.name).join(", ")} feed from tall paleobotany — check juveniles can reach it.`,
-        );
-      }
-    }
   }
 
   const feeders = buildFeeders(members);
@@ -505,9 +472,7 @@ export function buildRequirements(
     feeders,
     population: population_,
     marine,
-    juvenileActive,
     totalAnimals,
-    juvenileNotes,
   };
 }
 
@@ -526,7 +491,7 @@ export function enclosureHealth(
   ruleset: Ruleset,
   plants: Plant[],
 ): EnclosureHealth {
-  const req = buildRequirements(members, ruleset, plants, "adults");
+  const req = buildRequirements(members, ruleset, plants);
   return {
     conflicts: conflictPairs(members),
     fenceTier: req.fence?.tier ?? 0,

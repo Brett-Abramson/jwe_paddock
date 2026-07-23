@@ -34,12 +34,10 @@ function ResidentRow({
   member,
   enclosureId,
   conflicted,
-  showJuveniles,
 }: {
   member: RosterMember;
   enclosureId: string;
   conflicted: boolean;
-  showJuveniles: boolean;
 }) {
   const { state, dispatch } = useApp();
   const { species } = member;
@@ -68,7 +66,7 @@ function ResidentRow({
           trigger={() => (
             <span className="flex items-center gap-2 rounded-[6px] px-1.5 py-1 hover:bg-inset">
               <span className="pa-mono text-[11px] text-muted">{sexLabel(member)}</span>
-              {showJuveniles && member.juveniles > 0 && (
+              {member.juveniles > 0 && (
                 <span className="pa-mono rounded-[5px] bg-juv-header px-1.5 text-[10px] text-juv-text">
                   +{member.juveniles} juv
                 </span>
@@ -235,7 +233,6 @@ function SpacePlan({ rows }: { rows: SpacePlanRow[] }) {
  * corners this leaves don't show against the card's rounded border. */
 export function ResidentsPanel({ enclosure }: { enclosure: Enclosure }) {
   const { members, unknown } = resolveRoster(enclosure);
-  const juvenileActive = enclosure.juvenileMode === "juveniles";
   const speciesCount = members.length + unknown.length;
 
   if (speciesCount === 0) return null;
@@ -243,11 +240,8 @@ export function ResidentsPanel({ enclosure }: { enclosure: Enclosure }) {
   const conflicted = new Set(
     rosterConflicts(members).flatMap((c) => [c.a.id, c.b.id]),
   );
-  const spacePlan = terrainSpacePlan(members, enclosure.juvenileMode, PLANTS);
-  const animals = members.reduce(
-    (n, m) => n + m.count + (juvenileActive ? m.juveniles : 0),
-    0,
-  );
+  const spacePlan = terrainSpacePlan(members, PLANTS);
+  const animals = members.reduce((n, m) => n + m.count + m.juveniles, 0);
 
   const focusCandidates = () => {
     const el = document.getElementById("candidates-search");
@@ -279,7 +273,6 @@ export function ResidentsPanel({ enclosure }: { enclosure: Enclosure }) {
           member={m}
           enclosureId={enclosure.id}
           conflicted={conflicted.has(m.species.id)}
-          showJuveniles={juvenileActive}
         />
       ))}
       {unknown.map((e) => (

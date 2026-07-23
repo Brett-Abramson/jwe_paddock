@@ -16,7 +16,7 @@ import {
   type Dispatch,
   type ReactNode,
 } from "react";
-import type { Enclosure, Park, RosterEntry, JuvenileMode, SharedBuild } from "./types";
+import type { Enclosure, Park, RosterEntry, SharedBuild } from "./types";
 import type { RankBy } from "./engine";
 import { getSpecies } from "./data";
 import {
@@ -52,7 +52,6 @@ export type Action =
   | { type: "SET_COUNT"; enclosureId: string; speciesId: string; count: number }
   | { type: "SET_SEXES"; enclosureId: string; speciesId: string; females: number; males: number }
   | { type: "SET_JUVENILES"; enclosureId: string; speciesId: string; juveniles: number }
-  | { type: "SET_JUVENILE_MODE"; enclosureId: string; mode: JuvenileMode }
   | { type: "SET_ENCLOSURE_RULESET"; enclosureId: string; rulesetId: string }
   | { type: "RESET_ENCLOSURE_RULESET"; enclosureId: string }
   | { type: "MOVE_MEMBER"; fromEnclosureId: string; toEnclosureId: string; speciesId: string }
@@ -186,12 +185,6 @@ function reducer(state: AppState, action: Action): AppState {
       );
     }
 
-    case "SET_JUVENILE_MODE":
-      return updateEnclosure(state, action.enclosureId, (e) => ({
-        ...e,
-        juvenileMode: action.mode,
-      }));
-
     case "SET_ENCLOSURE_RULESET":
       return updateEnclosure(state, action.enclosureId, (e) => ({
         ...e,
@@ -244,7 +237,6 @@ function reducer(state: AppState, action: Action): AppState {
         name: `New Enclosure ${park.enclosureIds.length + 1}`,
         parkId: park.id,
         roster: [],
-        juvenileMode: "adults",
         territories: 1,
       };
       return {
@@ -330,7 +322,6 @@ function reducer(state: AppState, action: Action): AppState {
         name: action.build.name,
         parkId,
         roster: action.build.roster,
-        juvenileMode: action.build.juvenileMode,
         territories: action.build.territories,
       };
       return {

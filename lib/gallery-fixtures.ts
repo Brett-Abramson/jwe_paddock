@@ -22,7 +22,6 @@ const enclosure = (
   name,
   parkId: PARK_ID,
   roster,
-  juvenileMode: "adults",
   territories: 1,
   ...extra,
 });
@@ -84,7 +83,6 @@ export function galleryState(): AppState {
       GALLERY_ENCLOSURE_IDS.juvenile,
       "Brachiosaur Meadow",
       [entry("brachiosaurus", 2, 1, 1, 2), entry("stegosaurus", 3, 2, 1, 2)],
-      { juvenileMode: "juveniles" },
     ),
 
     // A saved plan referencing a species no longer in the dataset

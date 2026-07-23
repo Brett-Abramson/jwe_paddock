@@ -237,7 +237,7 @@ export function PopulationCard({ rows }: { rows: PopulationRow[] }) {
 /**
  * Everything here already autosaves to localStorage — there's nothing extra
  * to "save". What's actually missing is a portable copy: this encodes the
- * roster + ruleset + juvenile mode into a URL (no backend to store it in)
+ * roster + ruleset into a URL (no backend to store it in)
  * and copies it, so the build can be pasted into Discord/Reddit/wherever and
  * opened by anyone, read-only, with a one-click "Import into my parks".
  */
@@ -248,7 +248,6 @@ function ShareButton({ enclosure, rulesetId }: { enclosure: Enclosure; rulesetId
     const url = `${window.location.origin}/share?b=${encodeBuild({
       name: enclosure.name,
       rulesetId,
-      juvenileMode: enclosure.juvenileMode,
       territories: enclosure.territories,
       roster: enclosure.roster,
     })}`;
@@ -265,7 +264,7 @@ function ShareButton({ enclosure, rulesetId }: { enclosure: Enclosure; rulesetId
     <button
       type="button"
       onClick={share}
-      title="Copy a link to this exact build — roster, ruleset, juvenile mode — for anyone to open and import"
+      title="Copy a link to this exact build — roster and ruleset — for anyone to open and import"
       className={`mt-1 shrink-0 rounded-[9px] py-2.5 text-[13px] font-bold ${
         copied ? "bg-ok-tint text-ok-text" : "bg-cta text-cta-ink"
       }`}
@@ -281,8 +280,8 @@ export function BuildRequirements({ enclosure }: { enclosure: Enclosure }) {
   const ruleset = effectiveRuleset(state, enclosure);
 
   const req = useMemo(
-    () => buildRequirements(members, ruleset, PLANTS, enclosure.juvenileMode),
-    [members, ruleset, enclosure.juvenileMode],
+    () => buildRequirements(members, ruleset, PLANTS),
+    [members, ruleset],
   );
 
   const empty = members.length === 0;
@@ -320,23 +319,6 @@ export function BuildRequirements({ enclosure }: { enclosure: Enclosure }) {
               </>
             )}
             <PopulationCard rows={req.population} />
-
-            {req.juvenileActive && req.juvenileNotes.length > 0 && (
-              <div className="shrink-0 rounded-[10px] border border-juv-line bg-inset px-3.5 py-3">
-                <div className="pb-1.5 text-[12px] text-muted">
-                  Build requirements changed — <span className="text-juv-text">highlighted</span>:
-                </div>
-                {req.juvenileNotes.map((n, i) => (
-                  <div
-                    key={i}
-                    className="mt-1.5 flex items-start gap-2 rounded-[9px] border border-juv-line bg-inset px-2.5 py-2 text-[12px] text-juv-text"
-                  >
-                    <span>▲</span>
-                    {n}
-                  </div>
-                ))}
-              </div>
-            )}
 
             <ShareButton enclosure={enclosure} rulesetId={ruleset.id} />
           </>

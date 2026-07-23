@@ -1,11 +1,11 @@
 // ============================================================================
 // Shareable build links — no backend, so a link IS the storage: a single
-// enclosure's roster + ruleset + juvenile mode, packed into a URL-safe
-// string. /share decodes it into a real Park+Enclosure rendered through the
-// same isolated, non-persisting store the /states gallery uses (see
-// lib/gallery-fixtures.ts), so opening someone else's link never touches
-// your own saved parks. "Import into my parks" is the only way it reaches
-// your real, persisted state — see the IMPORT_BUILD action in store.tsx.
+// enclosure's roster + ruleset, packed into a URL-safe string. /share decodes it
+// into a real Park+Enclosure rendered through the same isolated, non-persisting
+// store the /states gallery uses (see lib/gallery-fixtures.ts), so opening
+// someone else's link never touches your own saved parks. "Import into my parks"
+// is the only way it reaches your real, persisted state — see the IMPORT_BUILD
+// action in store.tsx.
 // ============================================================================
 
 import type { AppState } from "./store";
@@ -16,7 +16,7 @@ interface Wire {
   v: 1;
   n: string;
   r: string;
-  j: SharedBuild["juvenileMode"];
+  j?: string; // legacy: ignored now, kept for URL compatibility
   t: number;
   m: [string, number, number, number, number][];
 }
@@ -41,7 +41,6 @@ export function encodeBuild(build: SharedBuild): string {
     v: 1,
     n: build.name,
     r: build.rulesetId,
-    j: build.juvenileMode,
     t: build.territories,
     m: build.roster.map((e) => [e.speciesId, e.count, e.females, e.males, e.juveniles]),
   };
@@ -56,7 +55,6 @@ export function decodeBuild(code: string): SharedBuild | undefined {
     return {
       name: wire.n,
       rulesetId: wire.r,
-      juvenileMode: wire.j,
       territories: wire.t,
       roster: wire.m.map(([speciesId, count, females, males, juveniles]) => ({
         speciesId,
@@ -88,7 +86,6 @@ export function buildSharedState(build: SharedBuild): AppState {
     name: build.name,
     parkId: SHARED_PARK_ID,
     roster: build.roster,
-    juvenileMode: build.juvenileMode,
     territories: build.territories,
   };
   return {

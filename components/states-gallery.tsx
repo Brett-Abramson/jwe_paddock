@@ -143,7 +143,6 @@ function GalleryBody() {
     resolveRoster(juvenileEnc).members,
     effectiveRuleset(state, juvenileEnc),
     PLANTS,
-    "juveniles",
   );
 
   return (
@@ -202,7 +201,6 @@ function GalleryBody() {
               resolveRoster(populationEnc).members,
               effectiveRuleset(state, populationEnc),
               PLANTS,
-              populationEnc.juvenileMode,
             ).population
           }
         />

@@ -5,14 +5,12 @@ import { useApp } from "@/lib/store";
 import type { Enclosure } from "@/lib/types";
 import { resolveRoster } from "@/lib/selectors";
 import { enclosurePeriod } from "@/lib/engine";
-import { Segmented } from "./ui/segmented";
 import { RulesetControl } from "./ruleset-control";
 
 export function EnclosureHeader({ enclosure }: { enclosure: Enclosure }) {
   const { dispatch } = useApp();
   const { members } = resolveRoster(enclosure);
   const period = enclosurePeriod(members.map((m) => m.species));
-  const juvenileActive = enclosure.juvenileMode === "juveniles";
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(enclosure.name);
 
@@ -66,26 +64,6 @@ export function EnclosureHeader({ enclosure }: { enclosure: Enclosure }) {
           </span>
         )}
         <RulesetControl enclosure={enclosure} />
-        {juvenileActive && (
-          <span className="pa-mono rounded-[5px] border border-juv-line bg-inset px-1.5 py-0.5 text-[10px] text-juv-text">
-            Juveniles
-          </span>
-        )}
-        <div className="ml-auto">
-          <Segmented
-            size="sm"
-            tone="juv"
-            value={enclosure.juvenileMode}
-            onChange={(mode) =>
-              dispatch({ type: "SET_JUVENILE_MODE", enclosureId: enclosure.id, mode })
-            }
-            options={[
-              { value: "adults", label: "Adults" },
-              { value: "pair", label: "Pair" },
-              { value: "juveniles", label: "+ Juveniles" },
-            ]}
-          />
-        </div>
       </div>
     </div>
   );
