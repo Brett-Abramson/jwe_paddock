@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   title: "Paddock Atlas — JWE3 park planner",
   description:
     "Plan Jurassic World Evolution 3 enclosures: live-scored candidates and a derived build order.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 // Runs synchronously in <head> before first paint so the saved skin is applied

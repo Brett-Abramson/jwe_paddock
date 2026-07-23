@@ -26,10 +26,7 @@ export function RulesetBanner() {
         <div className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-brand">
           <div className="h-[9px] w-[9px] rounded-[2px] bg-[color:var(--pa-brand-ink)]" />
         </div>
-        <div className="hidden flex-col leading-tight sm:flex">
-          <span className="text-[13px] font-bold text-ink">Paddock Atlas</span>
-          <span className="text-[10px] text-muted">Live-scored candidates, a derived build order</span>
-        </div>
+        <span className="hidden text-[13px] font-bold text-ink sm:inline">Paddock Atlas</span>
       </div>
 
       <div className="hidden h-6 w-px bg-banner-line sm:block" aria-hidden />
