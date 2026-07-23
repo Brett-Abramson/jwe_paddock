@@ -41,6 +41,13 @@
   --pa-brand-ink: oklch(0.17 0.012 80);
   --pa-link: oklch(0.72 0.15 250);
 
+  /* ruleset accent — hardcoded to amber-gold (same as dark) for consistency */
+  --pa-rule-fill: oklch(0.74 0.13 72);
+  --pa-rule-ink: oklch(0.18 0.02 72);
+  --pa-rule-text: oklch(0.78 0.1 72);
+  --pa-rule-tint: oklch(0.24 0.05 72);
+  --pa-rule-line: oklch(0.42 0.07 72);
+
   /* ruleset accent (amber-gold in dark) */
   --pa-rule-fill: oklch(0.74 0.13 72);
   --pa-rule-ink: oklch(0.18 0.02 72);
@@ -139,13 +146,6 @@
   --pa-brand: oklch(0.55 0.13 150);
   --pa-brand-ink: oklch(0.98 0.006 90);
   --pa-link: oklch(0.55 0.13 250);
-
-  /* ruleset accent = purple in the reference skin */
-  --pa-rule-fill: oklch(0.5 0.13 300);
-  --pa-rule-ink: oklch(0.98 0.01 300);
-  --pa-rule-text: oklch(0.5 0.08 300);
-  --pa-rule-tint: oklch(0.965 0.014 300);
-  --pa-rule-line: oklch(0.85 0.04 300);
 
   /* accuracy stays amber (hue 75) */
   --pa-acc-fill: oklch(0.74 0.12 75);
