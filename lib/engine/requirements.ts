@@ -118,6 +118,98 @@ function aggregateNeeds(
     .sort((a, b) => b.area - a.area);
 }
 
+// ---- terrain space plan ----------------------------------------------------
+
+/** Role buckets for the space plan / species-detail swatches. Not literal
+ * ground types — a colour role each real env-need label maps to. "crop" is
+ * the game's own "Leaf, Fiber, Fruit & Nut" brush category (feeder paleobotany
+ * — ground it stands on AND what it eats, unlike Meat/Prey/Fish feeders). */
+export type Biome = "forest" | "grass" | "sand" | "rock" | "wetland" | "water" | "crop";
+
+export interface SpacePlanRow {
+  /** label for this ground patch — a real need, or (for a plant pick that
+   * yields several needs from one physical footprint) those needs joined,
+   * matching the Plant plan card's own "Ground Fiber + Ground Fruit" style */
+  need: string;
+  biome: Biome;
+  /** real m² this patch occupies (painted area for plant rows) */
+  area: number;
+  /** share of total ground, 0–100 (rounded) */
+  pct: number;
+}
+
+/** Which biome colour a need paints, or null if it isn't ground cover. */
+export function biomeForNeed(need: string): Biome | null {
+  switch (need) {
+    case "Cover":
+      return "forest";
+    case "Pasture":
+      return "grass";
+    case "Arid":
+      return "sand";
+    case "Barren":
+      return "rock";
+    case "Wetland":
+      return "wetland";
+    case "Water":
+    case "Open Water":
+    case "Deep Water":
+      return "water";
+    case "Ground Leaf":
+    case "Tall Leaf":
+    case "Ground Fiber":
+    case "Tall Fiber":
+    case "Ground Fruit":
+    case "Tall Fruit":
+    case "Ground Nut":
+    case "Tall Nut":
+      return "crop";
+    default:
+      return null;
+  }
+}
+
+/**
+ * Terrain space plan — the share of enclosure ground each biome must cover to
+ * suit every resident, aggregated at the current population. Folds in the
+ * Plant plan (this is meant to help divvy up the enclosure, so painted flora
+ * has to count as ground too): each plant pick's real `paintArea` — not the
+ * raw need totals — since one painted patch can satisfy several needs at
+ * once and isn't painted twice. Real dug terrain (Water…) is added straight
+ * from the roster's needs. Derived live; nothing here is invented.
+ */
+export function terrainSpacePlan(
+  members: RosterMember[],
+  mode: JuvenileMode,
+  plants: Plant[],
+): SpacePlanRow[] {
+  const merged = new Map<string, { biome: Biome; area: number }>();
+  const add = (need: string, biome: Biome | null, area: number) => {
+    if (!biome || area <= 0) return;
+    const existing = merged.get(need);
+    if (existing) existing.area += area;
+    else merged.set(need, { biome, area });
+  };
+
+  const plantPlan = optimizePlants(aggregateNeeds(members, mode, "plant"), plants);
+  for (const pick of plantPlan.picks) {
+    // one physical patch can yield >1 need (e.g. a Swamp pick also gives some
+    // Cover) — colour it by whichever need it supplies the most of, so the
+    // footprint is counted once, not split across two biomes.
+    const dominant = [...pick.supplies].sort((a, b) => b.area - a.area)[0];
+    add(pick.supplies.map((s) => s.need).join(" + "), biomeForNeed(dominant.need), pick.paintArea);
+  }
+  for (const n of aggregateNeeds(members, mode, "terrain")) {
+    add(n.need, biomeForNeed(n.need), n.area);
+  }
+
+  const total = [...merged.values()].reduce((sum, r) => sum + r.area, 0);
+  if (total === 0) return [];
+  return [...merged.entries()]
+    .map(([need, r]) => ({ need, biome: r.biome, area: r.area, pct: Math.round((r.area / total) * 100) }))
+    .sort((a, b) => b.area - a.area);
+}
+
 function rosterLifestyle(members: RosterMember[]): Lifestyle {
   if (members.some((m) => m.species.lifestyle === "marine")) return "marine";
   if (members.some((m) => m.species.lifestyle === "aviary")) return "aviary";

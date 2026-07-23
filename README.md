@@ -55,9 +55,13 @@ the runtime to what Next 16 requires (`>=20.9.0`).
 - **Hatchery** — a per-park staging tray (🗂) for species that don't have an enclosure yet,
   independent of any single enclosure's rules. Flags blocked / wrong-habitat / already-added
   species and opens the same species detail modal as the roster.
-- **Enclosure workspace** — roster chips that open a **species detail modal** (env needs,
-  likes/dislikes, dig sites) on click, inline rename, a quiet **Juvenile** segmented toggle,
-  and territory/period chips.
+- **Enclosure workspace** — an **"In this enclosure" residents panel** (Turn 6 `#6e`): one
+  row per species with a game-status dot, a clickable name (dotted underline) that opens the
+  **species detail modal** (env needs, likes/dislikes, dig sites), `×count · sex split`, and a
+  ⋯ menu to edit counts / move to another enclosure / remove. Below the roster, a pinned
+  **Terrain space plan** — a stacked bar of biome shares (+ legend) showing how much enclosure
+  ground each biome must cover to suit every resident, recomputed live as the roster changes.
+  Plus inline rename, a quiet **Juvenile** segmented toggle, and territory/period chips.
 - **Live Candidates** — every species scored on both axes, nothing hidden: **Recommended /
   Allowed / Blocked** (left dot + word + plain-language reason) and a per-row **accuracy
   chip** (right). A search box plus Family/Diet/Terrain filter chips narrow the list without
@@ -218,5 +222,21 @@ the engine's shape.
   relationship graph instead, so T. rex stands alone in Tyrant Basin.
 - Juvenile mode drives the real **`Area Need Growth`** mechanic (needs scale with
   population) rather than per-lifestage need rows, which this source doesn't carry.
+- The **Terrain space plan** (Turn 6 `#6e`) uses the mock's illustrative biome names
+  (Forest/Grassland/Sand/Rock) only as **colour roles**. The bar's segments and legend are
+  the real env-need labels the scrape carries — `Cover`, `Pasture`, `Wetland`, `Arid`,
+  `Barren`, feeder paleobotany (`Ground`/`Tall` Leaf/Fiber/Fruit/Nut → a 7th **crop** colour,
+  the game's own "Leaf, Fiber, Fruit & Nut" brush category) and dug terrain (`Water` /
+  `Open Water` / `Deep Water`) — mapped to biome colours (Cover→forest, Pasture→grass,
+  Arid→sand, Barren→rock). We do **not** invent biome vocabulary or m²: it folds in the
+  **Plant plan** (this exists to help divvy up the enclosure, so painted flora has to count
+  as ground) using each plant pick's real `paintArea`, not raw need totals — a plant that
+  yields two needs from one physical patch (e.g. Swamp → Wetland + Cover) is counted once,
+  labeled with both needs joined, matching the Plant plan card's own style. Dug terrain adds
+  straight from the roster's real needs. See `terrainSpacePlan()` in
+  `lib/engine/requirements.ts`.
+- The species-detail surface is the app's existing **modal** (reused from Candidates and the
+  Hatchery) rather than `#6e`'s anchored popover — same content (terrain & water %+m², food,
+  scales-with-population), one established pattern.
 
 Not affiliated with Frontier Developments or Universal. Original, unbranded.

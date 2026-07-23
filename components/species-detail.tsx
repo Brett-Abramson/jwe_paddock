@@ -2,11 +2,15 @@
 
 import type { EnvNeed, NeedKind, Species } from "@/lib/types";
 import { formatArea } from "@/lib/data";
+import { biomeForNeed } from "@/lib/engine";
+import { BIOME_VAR } from "./biome-colors";
 
-/** Reuses the same role-color semantics as the diet dot (enclosure-header)
- * and the plant/terrain cards (build-requirements): green for flora,
- * blue for water/fish, red for meat/live prey. */
+/** Biome-mapped needs (Cover, Pasture, Water…) take their space-plan colour so
+ * the detail popover stays in sync with the Terrain space plan. Everything
+ * else falls back to role semantics: green flora, blue water/fish, red meat. */
 function needDotColor(need: string, kind: NeedKind): string {
+  const biome = biomeForNeed(need);
+  if (biome) return BIOME_VAR[biome];
   if (kind === "plant") return "var(--pa-ok-dot)";
   if (kind === "food") return need === "Fish" ? "var(--pa-sea-accent)" : "var(--pa-bad-dot)";
   return "var(--pa-sea-accent)";
@@ -50,7 +54,14 @@ export function SpeciesDetailModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-scrim px-4"
-      onClick={onClose}
+      onClick={(e) => {
+        // Stop here, not just at the inner card: this modal can be rendered
+        // inside a clickable row (see residents-panel.tsx's whole-row click).
+        // Without this, closing on scrim click would bubble into that row's
+        // own onClick and immediately reopen it in the same event.
+        e.stopPropagation();
+        onClose();
+      }}
     >
       <div
         onClick={(e) => e.stopPropagation()}

@@ -91,6 +91,19 @@
   /* neutral "allowed" dot */
   --pa-dot-neutral: oklch(0.6 0.02 85);
 
+  /* terrain biomes — Terrain space plan bar + species-detail swatches. Roles,
+     not literal ground: mapped from real env-need labels (Cover→forest,
+     Pasture→grass, Arid→sand, Barren→rock, Wetland, Water, feeder
+     paleobotany→crop). */
+  --pa-biome-forest: oklch(0.55 0.13 150);
+  --pa-biome-grass: oklch(0.72 0.15 128);
+  --pa-biome-sand: oklch(0.78 0.09 85);
+  --pa-biome-rock: oklch(0.5 0.02 85);
+  --pa-biome-wetland: oklch(0.58 0.09 200);
+  --pa-biome-water: oklch(0.62 0.18 245);
+  --pa-biome-crop: oklch(0.68 0.11 50);
+  --pa-biome-track: oklch(0.26 0.012 80);
+
   /* hazard stripe + shadows */
   --pa-hazard-a: oklch(0.85 0.16 95);
   --pa-hazard-b: oklch(0.17 0.012 80);
@@ -169,6 +182,16 @@
 
   --pa-dot-neutral: oklch(0.72 0.01 90);
 
+  /* terrain biomes — darker/richer to read on the light page */
+  --pa-biome-forest: oklch(0.55 0.13 150);
+  --pa-biome-grass: oklch(0.62 0.15 128);
+  --pa-biome-sand: oklch(0.68 0.1 85);
+  --pa-biome-rock: oklch(0.62 0.02 85);
+  --pa-biome-wetland: oklch(0.55 0.1 200);
+  --pa-biome-water: oklch(0.55 0.15 245);
+  --pa-biome-crop: oklch(0.6 0.12 50);
+  --pa-biome-track: oklch(0.9 0.006 90);
+
   --pa-hazard-a: oklch(0.82 0.15 95);
   --pa-hazard-b: oklch(0.95 0.006 90);
   --pa-shadow-frame: 0 24px 60px -30px oklch(0.4 0.02 90 / 0.5);
@@ -241,6 +264,15 @@
   --color-hyb-line: var(--pa-hyb-line);
 
   --color-dot-neutral: var(--pa-dot-neutral);
+
+  --color-biome-forest: var(--pa-biome-forest);
+  --color-biome-grass: var(--pa-biome-grass);
+  --color-biome-sand: var(--pa-biome-sand);
+  --color-biome-rock: var(--pa-biome-rock);
+  --color-biome-wetland: var(--pa-biome-wetland);
+  --color-biome-water: var(--pa-biome-water);
+  --color-biome-crop: var(--pa-biome-crop);
+  --color-biome-track: var(--pa-biome-track);
 
   --color-scrim: var(--pa-scrim);
 

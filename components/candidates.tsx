@@ -454,6 +454,7 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
             ⌕
           </span>
           <input
+            id="candidates-search"
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
