@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const ibmSans = IBM_Plex_Sans({
@@ -18,12 +19,29 @@ const ibmMono = IBM_Plex_Mono({
   display: "swap",
 });
 
+const title = "Paddock Atlas — Jurassic World Evolution 3 park planner";
+const description =
+  "Plan Jurassic World Evolution 3 enclosures: live-scored candidates and a derived build order.";
+
 export const metadata: Metadata = {
-  title: "Paddock Atlas — JWE3 park planner",
-  description:
-    "Plan Jurassic World Evolution 3 enclosures: live-scored candidates and a derived build order.",
+  metadataBase: new URL(SITE_URL),
+  title,
+  description,
   icons: {
     icon: "/favicon.svg",
+  },
+  openGraph: {
+    title,
+    description,
+    url: "/",
+    siteName: "Paddock Atlas",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
   },
 };
 
