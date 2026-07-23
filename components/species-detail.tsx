@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type { EnvNeed, NeedKind, Species } from "@/lib/types";
 import { formatArea } from "@/lib/data";
 import { biomeForNeed } from "@/lib/engine";
@@ -50,6 +51,14 @@ export function SpeciesDetailModal({
   const plantNeeds = species.envNeeds.filter((n) => n.kind === "plant");
   const terrainNeeds = species.envNeeds.filter((n) => n.kind === "terrain");
   const foodNeeds = species.envNeeds.filter((n) => n.kind === "food");
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
     <div

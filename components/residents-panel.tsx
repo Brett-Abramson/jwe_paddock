@@ -194,21 +194,22 @@ function SpacePlan({ rows }: { rows: SpacePlanRow[] }) {
     <div className="mt-3">
       <div className="mb-2 flex items-baseline justify-between">
         <span className="text-[12px] font-semibold text-ink2">Terrain space plan</span>
-        <span className="text-[11px] text-muted">share of enclosure ground</span>
+        <span className="text-[12px] text-body">share of enclosure ground</span>
       </div>
       <div
         className="flex h-[15px] overflow-hidden rounded-[6px] border border-line2"
         role="img"
         aria-label={`Terrain split: ${rows.map((r) => `${r.need} ${r.pct}%`).join(", ")}`}
       >
-        {rows.map((r) => (
+        {rows.map((r, i) => (
           <div
             key={r.need}
+            className={i > 0 ? "border-l border-app" : undefined}
             style={{ width: `${(r.area / total) * 100}%`, background: BIOME_VAR[r.biome] }}
           />
         ))}
       </div>
-      <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1.5 text-[11px] text-body">
+      <div className="mt-2.5 flex flex-wrap gap-x-3 gap-y-1.5 text-[13px] text-ink2">
         {rows.map((r) => (
           <span key={r.need} className="flex items-center gap-1.5" title={formatArea(r.area)}>
             <span

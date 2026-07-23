@@ -95,13 +95,13 @@
      not literal ground: mapped from real env-need labels (Cover→forest,
      Pasture→grass, Arid→sand, Barren→rock, Wetland, Water, feeder
      paleobotany→crop). */
-  --pa-biome-forest: oklch(0.55 0.13 150);
-  --pa-biome-grass: oklch(0.72 0.15 128);
-  --pa-biome-sand: oklch(0.78 0.09 85);
+  --pa-biome-forest: oklch(0.52 0.15 155);
+  --pa-biome-grass: oklch(0.8 0.2 112);
+  --pa-biome-sand: oklch(0.74 0.13 75);
   --pa-biome-rock: oklch(0.5 0.02 85);
-  --pa-biome-wetland: oklch(0.58 0.09 200);
-  --pa-biome-water: oklch(0.62 0.18 245);
-  --pa-biome-crop: oklch(0.68 0.11 50);
+  --pa-biome-wetland: oklch(0.62 0.14 190);
+  --pa-biome-water: oklch(0.58 0.21 258);
+  --pa-biome-crop: oklch(0.66 0.19 35);
   --pa-biome-track: oklch(0.26 0.012 80);
 
   /* hazard stripe + shadows */
@@ -183,13 +183,13 @@
   --pa-dot-neutral: oklch(0.72 0.01 90);
 
   /* terrain biomes — darker/richer to read on the light page */
-  --pa-biome-forest: oklch(0.55 0.13 150);
-  --pa-biome-grass: oklch(0.62 0.15 128);
-  --pa-biome-sand: oklch(0.68 0.1 85);
-  --pa-biome-rock: oklch(0.62 0.02 85);
-  --pa-biome-wetland: oklch(0.55 0.1 200);
-  --pa-biome-water: oklch(0.55 0.15 245);
-  --pa-biome-crop: oklch(0.6 0.12 50);
+  --pa-biome-forest: oklch(0.48 0.15 155);
+  --pa-biome-grass: oklch(0.62 0.2 112);
+  --pa-biome-sand: oklch(0.6 0.14 75);
+  --pa-biome-rock: oklch(0.55 0.02 85);
+  --pa-biome-wetland: oklch(0.52 0.14 190);
+  --pa-biome-water: oklch(0.5 0.2 258);
+  --pa-biome-crop: oklch(0.55 0.19 35);
   --pa-biome-track: oklch(0.9 0.006 90);
 
   --pa-hazard-a: oklch(0.82 0.15 95);
