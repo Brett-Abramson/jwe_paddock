@@ -182,14 +182,14 @@
 
   --pa-dot-neutral: oklch(0.72 0.01 90);
 
-  /* terrain biomes — darker/richer to read on the light page */
-  --pa-biome-forest: oklch(0.48 0.15 155);
-  --pa-biome-grass: oklch(0.62 0.2 112);
-  --pa-biome-sand: oklch(0.6 0.14 75);
+  /* terrain biomes — richer + more saturated to pop off the light page */
+  --pa-biome-forest: oklch(0.53 0.17 155);
+  --pa-biome-grass: oklch(0.66 0.22 115);
+  --pa-biome-sand: oklch(0.66 0.16 75);
   --pa-biome-rock: oklch(0.55 0.02 85);
-  --pa-biome-wetland: oklch(0.52 0.14 190);
-  --pa-biome-water: oklch(0.5 0.2 258);
-  --pa-biome-crop: oklch(0.55 0.19 35);
+  --pa-biome-wetland: oklch(0.56 0.16 190);
+  --pa-biome-water: oklch(0.53 0.22 258);
+  --pa-biome-crop: oklch(0.6 0.21 35);
   --pa-biome-track: oklch(0.9 0.006 90);
 
   --pa-hazard-a: oklch(0.82 0.15 95);
