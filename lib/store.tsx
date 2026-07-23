@@ -112,8 +112,20 @@ function uid(prefix: string): string {
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
-    case "HYDRATE":
-      return action.state;
+    case "HYDRATE": {
+      // Migrate old data with juvenileMode field (removed in later version)
+      const migratedState = {
+        ...action.state,
+        enclosures: Object.fromEntries(
+          Object.entries(action.state.enclosures).map(([id, enc]) => {
+            const { juvenileMode: _drop, ...rest } = enc as Enclosure & { juvenileMode?: string };
+            void _drop;
+            return [id, rest];
+          }),
+        ),
+      };
+      return migratedState;
+    }
 
     case "SELECT_PARK": {
       const park = state.parks.find((p) => p.id === action.parkId);
