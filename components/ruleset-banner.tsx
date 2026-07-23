@@ -23,8 +23,8 @@ export function RulesetBanner() {
     <div className="flex items-center gap-4 border-b border-banner-line bg-banner px-5 py-3">
       {/* brand mark + value prop — the only place a first-time visitor is told what this is */}
       <div className="flex items-center gap-2.5">
-        <div className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-brand">
-          <div className="h-[9px] w-[9px] rounded-[2px] bg-[color:var(--pa-brand-ink)]" />
+        <div className="flex h-6 w-6 items-center justify-center rounded-[6px]" style={{ background: "#F4C74E" }}>
+          <div className="h-[9px] w-[9px] rounded-[2px]" style={{ background: "#1a1a1a" }} />
         </div>
         <span className="hidden text-[13px] font-bold text-ink sm:inline">Paddock Atlas</span>
       </div>

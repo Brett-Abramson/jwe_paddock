@@ -41,7 +41,7 @@
   --pa-brand-ink: oklch(0.17 0.012 80);
   --pa-link: oklch(0.72 0.15 250);
 
-  /* ruleset accent — hardcoded to amber-gold (same as dark) for consistency */
+  /* ruleset & brand accents — hardcoded to dark theme colors for consistency across themes */
   --pa-rule-fill: oklch(0.74 0.13 72);
   --pa-rule-ink: oklch(0.18 0.02 72);
   --pa-rule-text: oklch(0.78 0.1 72);
@@ -143,7 +143,6 @@
 
   --pa-cta: oklch(0.28 0.01 90);
   --pa-cta-ink: oklch(0.98 0.004 90);
-  --pa-brand: oklch(0.55 0.13 150);
   --pa-brand-ink: oklch(0.98 0.006 90);
   --pa-link: oklch(0.55 0.13 250);
 
