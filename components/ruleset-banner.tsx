@@ -20,7 +20,7 @@ export function RulesetBanner() {
     : (ruleset?.note ?? "");
 
   return (
-    <div className="flex items-center gap-4 border-b px-5 py-3" style={{ background: "#1a1a1a", borderColor: "#333" }}>
+    <div className="flex items-center gap-4 border-b border-banner-line bg-banner px-5 py-3">
       {/* brand mark + value prop — the only place a first-time visitor is told what this is */}
       <div className="flex items-center gap-2.5">
         <div className="flex h-6 w-6 items-center justify-center rounded-[6px] bg-brand">
