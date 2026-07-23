@@ -15,6 +15,7 @@ import { ConflictBanner } from "./states/conflict-banner";
 import { EmptyPark } from "./states/empty-park";
 import { SingleSpeciesNote } from "./states/single-species";
 import { EnclosureHeader } from "./enclosure-header";
+import { ResidentsPanel } from "./residents-panel";
 import { ThemeToggle } from "./theme-toggle";
 
 function Card({
@@ -214,6 +215,9 @@ function GalleryBody() {
       >
         <div className="flex flex-col gap-3">
           <EnclosureHeader enclosure={singleEnc} />
+          <div className="px-5">
+            <ResidentsPanel enclosure={singleEnc} />
+          </div>
           {singleMembers[0] && (
             <SingleSpeciesNote
               species={singleMembers[0].species}
@@ -252,7 +256,12 @@ function GalleryBody() {
         width="w-[560px]"
         note="Kept in place, excluded from scoring, never silently dropped."
       >
-        <EnclosureHeader enclosure={driftEnc} />
+        <div className="flex flex-col gap-3">
+          <EnclosureHeader enclosure={driftEnc} />
+          <div className="px-5">
+            <ResidentsPanel enclosure={driftEnc} />
+          </div>
+        </div>
       </Card>
 
       <Card

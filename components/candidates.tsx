@@ -404,7 +404,7 @@ export function Candidates({ enclosure }: { enclosure: Enclosure }) {
   const revealBlocked = showBlocked || filtering;
 
   return (
-    <section className="flex min-h-0 flex-col overflow-hidden border-r border-line2">
+    <section className="flex min-h-0 flex-1 flex-col overflow-hidden">
       {/* controls */}
       <div className="flex flex-wrap items-center gap-3 px-5 pt-3 pb-2">
         <span className="text-[14px] font-semibold text-ink2">Candidates</span>

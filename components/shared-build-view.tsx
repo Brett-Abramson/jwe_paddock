@@ -7,6 +7,7 @@ import { StoreProvider, useApp } from "@/lib/store";
 import { decodeBuild, buildSharedState } from "@/lib/share";
 import { activeEnclosure } from "@/lib/selectors";
 import { EnclosureHeader } from "./enclosure-header";
+import { ResidentsPanel } from "./residents-panel";
 import { Candidates } from "./candidates";
 import { BuildRequirements } from "./build-requirements";
 import { ThemeToggle } from "./theme-toggle";
@@ -51,7 +52,12 @@ function SharedWorkspace({ code }: { code: string }) {
       <div className="flex min-h-0 flex-1 flex-col">
         <EnclosureHeader enclosure={enclosure} />
         <div className="grid min-h-0 flex-1 grid-cols-[1fr_372px]">
-          <Candidates enclosure={enclosure} />
+          <div className="flex min-h-0 flex-col overflow-hidden border-r border-line2">
+            <div className="shrink-0 px-5 pt-3 pb-1">
+              <ResidentsPanel enclosure={enclosure} />
+            </div>
+            <Candidates enclosure={enclosure} />
+          </div>
           <BuildRequirements enclosure={enclosure} />
         </div>
       </div>

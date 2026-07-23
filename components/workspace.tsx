@@ -4,6 +4,7 @@ import { useApp } from "@/lib/store";
 import { activePark, activeEnclosure, resolveRoster } from "@/lib/selectors";
 import { rosterConflicts } from "@/lib/engine";
 import { EnclosureHeader } from "./enclosure-header";
+import { ResidentsPanel } from "./residents-panel";
 import { Candidates } from "./candidates";
 import { BuildRequirements } from "./build-requirements";
 import { ConflictBanner } from "./states/conflict-banner";
@@ -34,7 +35,12 @@ export function Workspace() {
         </div>
       )}
       <div className="grid min-h-0 flex-1 grid-cols-[1fr_372px]">
-        <Candidates enclosure={enclosure} />
+        <div className="flex min-h-0 flex-col overflow-hidden border-r border-line2">
+          <div className="shrink-0 px-5 pt-3 pb-1">
+            <ResidentsPanel enclosure={enclosure} />
+          </div>
+          <Candidates enclosure={enclosure} />
+        </div>
         <BuildRequirements enclosure={enclosure} />
       </div>
     </div>

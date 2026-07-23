@@ -7,7 +7,6 @@ import { resolveRoster } from "@/lib/selectors";
 import { enclosurePeriod } from "@/lib/engine";
 import { Segmented } from "./ui/segmented";
 import { RulesetControl } from "./ruleset-control";
-import { ResidentsPanel } from "./residents-panel";
 
 export function EnclosureHeader({ enclosure }: { enclosure: Enclosure }) {
   const { dispatch } = useApp();
@@ -28,7 +27,7 @@ export function EnclosureHeader({ enclosure }: { enclosure: Enclosure }) {
   };
 
   return (
-    <div className="flex flex-col gap-3 border-b border-line2 px-5 py-4">
+    <div className="border-b border-line2 px-5 py-4">
       <div className="flex items-center gap-2.5">
         {editing ? (
           <input
@@ -88,8 +87,6 @@ export function EnclosureHeader({ enclosure }: { enclosure: Enclosure }) {
           />
         </div>
       </div>
-
-      <ResidentsPanel enclosure={enclosure} />
     </div>
   );
 }
